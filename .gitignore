@@ -25,11 +25,7 @@ hs_err_pid*
 # add
 build
 gradle
-gradlew.bat
-gradlew
 HELP.md
 .gradle
 .idea
 .DS_Store
-security.properties
-db.properties
