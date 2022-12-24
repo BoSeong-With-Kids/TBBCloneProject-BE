@@ -1,21 +1,21 @@
 package com.team1.TBBCloneCoding.project.mapper;
 
 import com.team1.TBBCloneCoding.member.entity.Member;
-import com.team1.TBBCloneCoding.project.dto.ProjectRequestDto;
+import com.team1.TBBCloneCoding.project.dto.ProjectCreateRequestDto;
 import com.team1.TBBCloneCoding.project.entity.Project;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProjectMapper {
-    public Project toEntity(ProjectRequestDto projectRequestDto, Member member){
+    public Project toEntity(ProjectCreateRequestDto projectCreateRequestDto, Member member){
         return Project.builder()
-                .category(projectRequestDto.getCategory())
-                .title(projectRequestDto.getTitle())
-                .summary(projectRequestDto.getSummary())
-                .goalPrice(projectRequestDto.getGoalPrice())
-                .startDate(projectRequestDto.getEndDate())
-                .endDate(projectRequestDto.getEndDate())
-                .imageList(projectRequestDto.getImageList())
+                .category(projectCreateRequestDto.getCategory())
+                .title(projectCreateRequestDto.getTitle())
+                .summary(projectCreateRequestDto.getSummary())
+                .goalPrice(projectCreateRequestDto.getGoalPrice())
+                .startDate(projectCreateRequestDto.getEndDate())
+                .endDate(projectCreateRequestDto.getEndDate())
+                .imageList(projectCreateRequestDto.getImageList())
                 .member(member)
                 .build();
     }
