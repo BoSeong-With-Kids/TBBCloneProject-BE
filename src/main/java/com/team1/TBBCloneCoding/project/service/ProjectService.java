@@ -77,7 +77,7 @@ public class ProjectService {
             totalSupport = totalSupport + support.getSupportAmount();
         }
 
-        // ProjectDetails를 불러오는 사람이 이 프로젝트를 올린 사람인지 확인하는 로직 :: 같은 사람이 맞다면 => "isMine = true", 같은 사람이 아니면 => "isMine = false"
+        // ProjectDetails를 불러오는 사람이 이 프로젝트를 올린 사람인지 확인하는 로 :: 같은 사람이 맞다면 => "isMine = true", 같은 사람이 아니면 => "isMine = false"
         boolean isMine = false;
         if(member.getMemberId() == project.getMember().getMemberId()){
             isMine = true;
