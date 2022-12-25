@@ -39,6 +39,9 @@ public class Project extends TimeStamp {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
+    @Column(nullable = false)
+    private int recommendCount;
+
     @ElementCollection
     @Column(nullable = true)
     private List<Integer> imageList;
