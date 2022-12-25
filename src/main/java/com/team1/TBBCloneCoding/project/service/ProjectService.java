@@ -62,6 +62,7 @@ public class ProjectService {
         return new ResponseDto("success", "프로젝트 리스트 조회에 성공했습니다.", projectList);
     }
 
+    @Transactional(readOnly = true)
     public ResponseDto getProjectDetails(Long projectId, Member member) {
 
         Project project = projectRepository.findById(projectId).orElseThrow(
