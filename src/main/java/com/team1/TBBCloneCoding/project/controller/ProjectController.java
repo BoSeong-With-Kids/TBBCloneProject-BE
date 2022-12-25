@@ -37,4 +37,12 @@ public class ProjectController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
+    @GetMapping("/{projectId}/details")
+    public ResponseEntity<ResponseDto> getProjectDetails(@PathVariable Long projectId,  @AuthenticationPrincipal UserDetailsImpl userDetails){
+        ResponseDto responseDto = projectService.getProjectDetails(projectId, userDetails.getMember());
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+
+
 }
