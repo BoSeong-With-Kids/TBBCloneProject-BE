@@ -16,5 +16,5 @@ public class ProjectCreateRequestDto {
     private Long goalPrice;
     private LocalDateTime statDate;
     private LocalDateTime endDate;
-    private List<Integer> imageList;
+    private List<Long> imageList;
 }

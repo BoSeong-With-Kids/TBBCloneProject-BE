@@ -27,4 +27,9 @@ public class Image {
         this.imageUrl = imageUrl;
         this.project = project;
     }
+
+    public void imageConnectionWithProject(Project project){
+        this.project = project;
+    }
+
 }
