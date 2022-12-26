@@ -7,12 +7,14 @@ import com.team1.TBBCloneCoding.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-
-@RequestMapping("/api/tumblebug")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/tumblebug")
 public class CommentController {
 
     private final CommentService commentService;
@@ -25,7 +27,6 @@ public class CommentController {
         return new ResponseEntity(responseDto, HttpStatus.OK) ;
     }
 
-
     @GetMapping("/project/{projectId}/comment")
     public ResponseEntity<ResponseDto> getAllComment(Member member, @PathVariable Long projectId) {
 
@@ -35,4 +36,12 @@ public class CommentController {
 
     }
 
+    @DeleteMapping("/project/{projectId}/comment/{commentId}")
+    public ResponseEntity<ResponseDto> deleteComment(Member member, @PathVariable Long commentId){
+
+        ResponseDto responseDto = commentService.deleteComment(member, commentId);
+
+        return new ResponseEntity(responseDto, HttpStatus.OK);
+
+    }
 }

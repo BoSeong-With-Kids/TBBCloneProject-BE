@@ -1,5 +1,9 @@
 package com.team1.TBBCloneCoding.comment.service;
 
+import com.team1.TBBCloneCoding.comment.entity.Comment;
+import com.team1.TBBCloneCoding.comment.repository.CommentRepository;
+import com.team1.TBBCloneCoding.common.dto.ResponseDto;
+import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.comment.dto.CommentCreateRequestDto;
 import com.team1.TBBCloneCoding.comment.dto.CommentResponseDto;
 import com.team1.TBBCloneCoding.comment.entity.Comment;
@@ -22,12 +26,13 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-
+    
     private final MemberRepository memberRepository;
 
     private final ProjectRepository projectRepository;
 
     private final CommentMapper commentMapper;
+
 
     @Transactional
     public ResponseDto createComment(Member member, Long projectId, CommentCreateRequestDto commentCreateRequestDto){
@@ -50,6 +55,7 @@ public class CommentService {
 
     }
 
+
     @Transactional(readOnly = true)
     public ResponseDto getAllComment(Member member, Long projectId) {
 
@@ -70,6 +76,25 @@ public class CommentService {
         }
 
         return new ResponseDto("success","댓글을 조회하였습니다", allCommentResponseDto);
+       
+     }
+        
+    @Transactional
+    public ResponseDto deleteComment(Member member, Long commentId){
 
+        Long memberId = member.getmemberId();
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new NullPointerException()
+        );
+
+        if(comment.getMember().getMemberId().equals(memberId)){
+            commentRepository.delete(comment);
+        } else {
+            throw new IllegalArgumentException("작성자만 삭제할 수 있습니다");
+        }
+
+            return new ResponseDto("success", "댓글을 삭제하였습니다", null);
     }
+    
 }
