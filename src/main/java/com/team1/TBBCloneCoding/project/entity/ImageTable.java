@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Image {
+public class ImageTable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class Image {
     private Project project;
 
     @Builder
-    public Image(String imageUrl, Project project) {
+    public ImageTable(String imageUrl, Project project) {
         this.imageUrl = imageUrl;
         this.project = project;
     }

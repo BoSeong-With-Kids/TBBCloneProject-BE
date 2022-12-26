@@ -28,6 +28,10 @@ public class Member extends TimeStamp {
     @Column(nullable = false)
     private String summary;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private MemberRoleEnum role;
+
     @Builder
     public Member(String loginId, String password, String nickname, String summary) {
         this.loginId = loginId;
@@ -36,4 +40,10 @@ public class Member extends TimeStamp {
         this.summary = summary;
     }
 
+    public Member(String loginId, String password, String nickname, MemberRoleEnum role) {
+        this.loginId = loginId;
+        this.password = password;
+        this.nickname = nickname;
+        this.role = role;
+    }
 }
