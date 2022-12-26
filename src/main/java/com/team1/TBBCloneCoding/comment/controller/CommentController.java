@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/project")
+@RequestMapping("/api/tumblebug")
 public class CommentController {
 
     private final CommentService commentService;
 
 
-    @DeleteMapping("/{projectId}/comment/{commentId}")
+    @DeleteMapping("/project/{projectId}/comment/{commentId}")
     public ResponseEntity<ResponseDto> deleteComment(Member member, @PathVariable Long commentId){
 
         ResponseDto responseDto = commentService.deleteComment(member, commentId);
