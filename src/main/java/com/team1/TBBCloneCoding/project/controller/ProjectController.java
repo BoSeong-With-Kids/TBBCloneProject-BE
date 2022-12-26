@@ -20,6 +20,6 @@ public class ProjectController {
     @PostMapping("")
     public ResponseEntity<ResponseDto> createProject(@RequestBody @Valid ProjectCreateRequestDto projectCreateRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         ResponseDto responseDto = projectService.createProject(projectCreateRequestDto, userDetails.getMember());
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 }
