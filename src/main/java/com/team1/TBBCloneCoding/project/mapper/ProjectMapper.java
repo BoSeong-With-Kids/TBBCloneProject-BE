@@ -15,7 +15,6 @@ public class ProjectMapper {
                 .goalPrice(projectCreateRequestDto.getGoalPrice())
                 .startDate(projectCreateRequestDto.getEndDate())
                 .endDate(projectCreateRequestDto.getEndDate())
-                .imageList(projectCreateRequestDto.getImageList())
                 .member(member)
                 .build();
     }
