@@ -25,6 +25,9 @@ public class ProjectService {
     @Transactional
     public ResponseDto createProject(ProjectCreateRequestDto projectCreateRequestDto, Member member) {
         Project project = projectMapper.toEntity(projectCreateRequestDto, member);
+        // * 수정 : 이미지 저장하는 로직 -> 독립
+        //
+
         projectRepository.save(project);
         return new ResponseDto("success","프로젝트 등록에 성공했습니다.",null);
     }
