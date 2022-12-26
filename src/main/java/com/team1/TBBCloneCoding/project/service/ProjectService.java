@@ -29,7 +29,7 @@ public class ProjectService {
         List<Long> imageNumberList = projectCreateRequestDto.getImageList();
         Image image;
         for(Long i : imageNumberList){
-            // 저장된 이미지를 레포지토리 가져와서 연결 -> 저장로직은 구현이 안됨
+            // 저장된 이미지를 레포지토리 가져와서 연결
             image = imageReposirory.findById(i).orElseThrow(
                     () -> new NullPointerException("id에 맞는 이미지가 데이터베이스에 존재하지 않습니다.")
             );
