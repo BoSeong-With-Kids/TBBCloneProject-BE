@@ -1,4 +1,4 @@
-package com.team1.TBBCloneCoding.comment.Dto;
+package com.team1.TBBCloneCoding.comment.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentCreateRequestDto {
 
-        private String contents;
+    private String contents;
 
-    }
+}
