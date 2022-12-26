@@ -1,6 +1,5 @@
 package com.team1.TBBCloneCoding.comment.service;
 
-import com.team1.TBBCloneCoding.comment.controller.CommentController;
 import com.team1.TBBCloneCoding.comment.dto.CommentCreateRequestDto;
 import com.team1.TBBCloneCoding.comment.dto.CommentResponseDto;
 import com.team1.TBBCloneCoding.comment.entity.Comment;
@@ -31,9 +30,11 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     @Transactional
-    public void createComment(Long memberId, Long projectId, CommentCreateRequestDto commentCreateRequestDto){
+    public ResponseDto createComment(Member member, Long projectId, CommentCreateRequestDto commentCreateRequestDto){
 
-        Member member = memberRepository.findById(memberId).orElseThrow(
+        Long memberId = member.getMemberId();
+
+        Member memberForCreateComment = memberRepository.findById(memberId).orElseThrow(
                 () -> new NullPointerException()
         );
 
@@ -41,14 +42,18 @@ public class CommentService {
                 () -> new NullPointerException()
         );
 
-        Comment comment = commentMapper.toComment(member, commentCreateRequestDto, project);
+        Comment comment = commentMapper.toComment(memberForCreateComment, commentCreateRequestDto, project);
 
         commentRepository.save(comment);
+
+        return new ResponseDto("success", "댓글을 작성하였습니다", null);
 
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> getAllComment(Long projectId, Long memberId) {
+    public ResponseDto getAllComment(Member member, Long projectId) {
+
+        Long memberId = member.getMemberId();
 
         Boolean commentIsMine = false;
 
@@ -64,7 +69,7 @@ public class CommentService {
             allCommentResponseDto.add(commentMapper.toResponseDto(comment,commentIsMine));
         }
 
-        return allCommentResponseDto;
+        return new ResponseDto("success","댓글을 조회하였습니다", allCommentResponseDto);
 
     }
 }
