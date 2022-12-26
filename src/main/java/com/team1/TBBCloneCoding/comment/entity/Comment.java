@@ -1,4 +1,5 @@
 package com.team1.TBBCloneCoding.comment.entity;
+
 import com.team1.TBBCloneCoding.common.entity.TimeStamp;
 import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.project.entity.Project;
@@ -41,4 +42,9 @@ public class Comment extends TimeStamp {
         this.project = project;
         this.member = member;
     }
+
+    public void updateComment(String contents){
+        this.contents = contents;
+    }
+    
 }

@@ -1,5 +1,6 @@
 package com.team1.TBBCloneCoding.comment.controller;
 
+
 import com.team1.TBBCloneCoding.comment.dto.CommentCreateRequestDto;
 import com.team1.TBBCloneCoding.comment.service.CommentService;
 import com.team1.TBBCloneCoding.common.dto.ResponseDto;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+
 
 @RestController
 @RequiredArgsConstructor
@@ -27,14 +30,24 @@ public class CommentController {
         return new ResponseEntity(responseDto, HttpStatus.OK) ;
     }
 
+
     @GetMapping("/project/{projectId}/comment")
     public ResponseEntity<ResponseDto> getAllComment(Member member, @PathVariable Long projectId) {
 
         ResponseDto responseDto = commentService.getAllComment(member, projectId);
 
         return new ResponseEntity(responseDto, HttpStatus.OK);
-
     }
+    
+    
+    @PutMapping("/project/{projectId}/comment/{commentId}")
+    public ResponseEntity<ResponseDto> updateComment(Member member, @PathVariable Long commentId, @RequestBody CommentCreateRequestDto commentCreateRequestDto) {
+
+        ResponseDto responseDto = commentService.updateComment(member, commentId, commentCreateRequestDto);
+        
+        return new ResponseEntity(responseDto, HttpStatus.OK);
+     }  
+     
 
     @DeleteMapping("/project/{projectId}/comment/{commentId}")
     public ResponseEntity<ResponseDto> deleteComment(Member member, @PathVariable Long commentId){
@@ -42,6 +55,6 @@ public class CommentController {
         ResponseDto responseDto = commentService.deleteComment(member, commentId);
 
         return new ResponseEntity(responseDto, HttpStatus.OK);
-
     }
+    
 }

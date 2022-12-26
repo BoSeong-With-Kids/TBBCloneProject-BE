@@ -1,9 +1,5 @@
 package com.team1.TBBCloneCoding.comment.service;
 
-import com.team1.TBBCloneCoding.comment.entity.Comment;
-import com.team1.TBBCloneCoding.comment.repository.CommentRepository;
-import com.team1.TBBCloneCoding.common.dto.ResponseDto;
-import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.comment.dto.CommentCreateRequestDto;
 import com.team1.TBBCloneCoding.comment.dto.CommentResponseDto;
 import com.team1.TBBCloneCoding.comment.entity.Comment;
@@ -17,9 +13,9 @@ import com.team1.TBBCloneCoding.project.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +48,6 @@ public class CommentService {
         commentRepository.save(comment);
 
         return new ResponseDto("success", "댓글을 작성하였습니다", null);
-
     }
 
 
@@ -75,10 +70,30 @@ public class CommentService {
             allCommentResponseDto.add(commentMapper.toResponseDto(comment,commentIsMine));
         }
 
-        return new ResponseDto("success","댓글을 조회하였습니다", allCommentResponseDto);
-       
+        return new ResponseDto("success","댓글을 조회하였습니다", allCommentResponseDto);     
      }
-        
+     
+     
+    @Transactional
+    public ResponseDto updateComment(Member member, Long commentId, CommentCreateRequestDto commentCreateRequestDto){
+
+        Long memberId = member.getMemberId();
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new NullPointerException("해당 코멘트를 찾을 수 없습니다")
+        );
+
+        if(comment.getMember().getMemberId().equals(memberId)){
+            comment.updateComment(commentCreateRequestDto.getContents());
+
+        } else {
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다");
+        }
+
+        return new ResponseDto("success", "댓글을 수정하였습니다", null);
+    }
+       
+       
     @Transactional
     public ResponseDto deleteComment(Member member, Long commentId){
 
