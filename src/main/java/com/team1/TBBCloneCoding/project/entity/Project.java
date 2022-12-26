@@ -2,15 +2,12 @@ package com.team1.TBBCloneCoding.project.entity;
 
 import com.team1.TBBCloneCoding.common.entity.TimeStamp;
 import com.team1.TBBCloneCoding.member.entity.Member;
-import com.team1.TBBCloneCoding.project.dto.ProjectUpdateRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -39,12 +36,6 @@ public class Project extends TimeStamp {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
-    @Column(nullable = false)
-    private int recommendCount;
-
-    //@ElementCollection
-    //@Column(nullable = true)
-    //private List<Integer> imageList;
 
     @ManyToOne
     @JoinColumn(name = "Member_Id", nullable = false)
@@ -59,15 +50,5 @@ public class Project extends TimeStamp {
         this.startDate = startDate;
         this.endDate = endDate;
         this.member = member;
-    }
-
-    // 수정 : 매퍼사용 Dto -> 매퍼 -> entity
-    public void update(ProjectUpdateRequestDto projectUpdateRequestDto) {
-        this.category = projectUpdateRequestDto.getCategory();
-        this.title = projectUpdateRequestDto.getTitle();
-        this.summary = projectUpdateRequestDto.getSummary();
-        this.goalPrice = projectUpdateRequestDto.getGoalPrice();
-        this.startDate = projectUpdateRequestDto.getStartDate();
-        this.endDate = projectUpdateRequestDto.getEndDate();
     }
 }
