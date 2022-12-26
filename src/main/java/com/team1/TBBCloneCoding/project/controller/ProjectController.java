@@ -22,7 +22,6 @@ public class ProjectController {
     @PutMapping("/{projectId}")
     public ResponseEntity<ResponseDto> updateProject(@PathVariable Long projectId, @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         ResponseDto responseDto = projectService.updateProject(projectId, projectUpdateRequestDto, userDetails.getMember());
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        return new ResponseEntity(responseDto, HttpStatus.OK);
     }
-
 }

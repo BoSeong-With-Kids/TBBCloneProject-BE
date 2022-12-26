@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final ProjectMapper projectMapper;
     @Transactional
     public ResponseDto updateProject(Long projectId, ProjectUpdateRequestDto projectUpdateRequestDto, Member member) {
         Project project = projectRepository.findById(projectId).orElseThrow(
@@ -25,8 +26,10 @@ public class ProjectService {
             throw new IllegalArgumentException("프로젝트를 생성한 사용자가 아닙니다.");
         }
 
-        project.update(projectUpdateRequestDto);
-        return new ResponseDto("success","프로젝트 수정에 성공했습니다.",null);
 
+        //project.update(projectUpdateRequestDto);
+        project = projectMapper.projectUpdateRequestDtoToEntity(projectUpdateRequestDto);
+
+        return new ResponseDto("success","프로젝트 수정에 성공했습니다.",null);
     }
 }
