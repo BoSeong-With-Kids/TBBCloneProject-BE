@@ -1,5 +1,6 @@
 package com.team1.TBBCloneCoding.comment.entity;
 
+import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.project.entity.Project;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,9 +24,18 @@ public class Comment {
     @JoinColumn(name = "Project_Id", nullable = false)
     private Project project;
 
+    @ManyToOne
+    @JoinColumn(name = "Member_Id", nullable = false)
+    private Member member;
+
     @Builder
-    public Comment(String contents, Project project) {
+    public Comment(String contents, Project project, Member member) {
         this.contents = contents;
         this.project = project;
+        this.member = member;
+    }
+
+    public void updateComment(String contents){
+        this.contents = contents;
     }
 }
