@@ -19,12 +19,6 @@ import javax.validation.Valid;
 public class ProjectController {
     private final ProjectService projectService;
 
-    @PostMapping("")
-    public ResponseEntity<ResponseDto> createProject(@RequestBody @Valid ProjectCreateRequestDto projectCreateRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        ResponseDto responseDto = projectService.createProject(projectCreateRequestDto, userDetails.getMember());
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-    }
-
     @PutMapping("/{projectId}")
     public ResponseEntity<ResponseDto> updateProject(@PathVariable Long projectId, @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         ResponseDto responseDto = projectService.updateProject(projectId, projectUpdateRequestDto, userDetails.getMember());

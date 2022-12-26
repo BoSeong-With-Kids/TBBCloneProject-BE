@@ -39,16 +39,12 @@ public class Project extends TimeStamp {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
-    @ElementCollection
-    @Column(nullable = true)
-    private List<Integer> imageList;
-
     @ManyToOne
     @JoinColumn(name = "Member_Id", nullable = false)
     private Member member;
 
     @Builder
-    public Project(String category, String title, String summary, Long goalPrice, LocalDateTime startDate, LocalDateTime endDate, Member member, List<Integer> imageList) {
+    public Project(String category, String title, String summary, Long goalPrice, LocalDateTime startDate, LocalDateTime endDate, Member member) {
         this.category = category;
         this.title = title;
         this.summary = summary;
@@ -56,19 +52,8 @@ public class Project extends TimeStamp {
         this.startDate = startDate;
         this.endDate = endDate;
         this.member = member;
-        this.imageList = imageList;
     }
 
-    /*
-    private String category;
-    @Size(min=0,max=30, message = "30자 미만으로 작성해주세요")
-    private String title;
-    @Size(min=0,max=150, message = "150자 미만으로 작성해주세요")
-    private String summary;
-    private Long goalPrice;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    */
     public void update(ProjectUpdateRequestDto projectUpdateRequestDto) {
         this.category = projectUpdateRequestDto.getCategory();
         this.title = projectUpdateRequestDto.getTitle();

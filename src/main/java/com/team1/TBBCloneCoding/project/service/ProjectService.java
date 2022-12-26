@@ -15,14 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final ProjectMapper projectMapper;
-    @Transactional
-    public ResponseDto createProject(ProjectCreateRequestDto projectCreateRequestDto, Member member) {
-        Project project = projectMapper.toEntity(projectCreateRequestDto, member);
-        projectRepository.save(project);
-        return new ResponseDto("success","프로젝트 등록에 성공했습니다.",null);
-    }
-
     @Transactional
     public ResponseDto updateProject(Long projectId, ProjectUpdateRequestDto projectUpdateRequestDto, Member member) {
         Project project = projectRepository.findById(projectId).orElseThrow(
