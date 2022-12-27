@@ -39,6 +39,7 @@ public class Project extends TimeStamp {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
+
     @ManyToOne
     @JoinColumn(name = "Member_Id", nullable = false)
     private Member member;
