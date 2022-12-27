@@ -29,3 +29,6 @@ HELP.md
 .gradle
 .idea
 .DS_Store
+
+# 비밀키 작성부분
+application-private.properties
