@@ -1,19 +1,18 @@
 package com.team1.TBBCloneCoding.project.controller;
 
 import com.team1.TBBCloneCoding.common.dto.ResponseDto;
+import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.project.dto.SupportCreateRequestDto;
 import com.team1.TBBCloneCoding.project.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Member;
+
 
 @RequiredArgsConstructor
+@RestController
 @RequestMapping("/api/tumblebug")
 public class ProjectController {
 
