@@ -1,8 +1,10 @@
 package com.team1.TBBCloneCoding.project.dto;
 
+import com.team1.TBBCloneCoding.project.entity.Image;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 public class ProjectDetailsReadResponseDto {
@@ -17,4 +19,5 @@ public class ProjectDetailsReadResponseDto {
     private int projectLike;
     private String content;
     private boolean projectIsMine;
+    private List<Image> thumbnailImageList;
 }

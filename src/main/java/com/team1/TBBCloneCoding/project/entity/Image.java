@@ -18,8 +18,11 @@ public class Image {
     @Column(nullable = false)
     private String imageUrl;
 
+    @Column(nullable = true)
+    private String whichContent;
+
     @ManyToOne
-    @JoinColumn(name = "Project_Id", nullable = true)
+    @JoinColumn(name = "Project_Id", nullable = false)
     private Project project;
 
     @Builder
@@ -27,4 +30,11 @@ public class Image {
         this.imageUrl = imageUrl;
         this.project = project;
     }
+
+    public void thumbnailImageConnectionWithProject(Project project){
+        this.project = project;
+        this.whichContent = "thumbnailImage";
+    }
+
+
 }

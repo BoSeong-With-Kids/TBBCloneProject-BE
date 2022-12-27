@@ -3,10 +3,12 @@ package com.team1.TBBCloneCoding.project.service;
 import com.team1.TBBCloneCoding.common.dto.ResponseDto;
 import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.project.dto.ProjectDetailsReadResponseDto;
+import com.team1.TBBCloneCoding.project.entity.Image;
 import com.team1.TBBCloneCoding.project.entity.Like;
 import com.team1.TBBCloneCoding.project.entity.Project;
 import com.team1.TBBCloneCoding.project.entity.Support;
 import com.team1.TBBCloneCoding.project.mapper.ProjectMapper;
+import com.team1.TBBCloneCoding.project.repository.ImageReposirory;
 import com.team1.TBBCloneCoding.project.repository.LikeRepository;
 import com.team1.TBBCloneCoding.project.repository.ProjectRepository;
 import com.team1.TBBCloneCoding.project.repository.SupportRepository;
@@ -23,6 +25,7 @@ public class ProjectService {
     private final SupportRepository supportRepository;
     private final ProjectMapper projectMapper;
     private final LikeRepository likeRepository;
+    private final ImageReposirory imageReposirory;
 
 
     @Transactional(readOnly = true)
@@ -49,9 +52,10 @@ public class ProjectService {
 
         int projectLike = likeRepository.findAllByProject(project).size();
 
-        ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine, projectLike);
+        // 이미지 데이터베이스에서 project에 연관된 thumbnailImage 리스트를 불러오기(프로젝트, 문자열인풋하기)
+        List<Image> thumbnailImageList = imageReposirory.findAllByProjectAndWhichContent(project,"thumbnailImage");
+
+        ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine, projectLike, thumbnailImageList);
         return new ResponseDto("success","리스트 조회 성공", projectDetailsReadResponseDto);
     }
-
-
 }
