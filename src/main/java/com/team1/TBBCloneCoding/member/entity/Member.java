@@ -25,15 +25,10 @@ public class Member extends TimeStamp {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
-    private String summary;
-
     @Builder
-    public Member(String loginId, String password, String nickname, String summary) {
+    public Member(String loginId, String password, String nickname) {
         this.loginId = loginId;
         this.password = password;
         this.nickname = nickname;
-        this.summary = summary;
     }
-
 }

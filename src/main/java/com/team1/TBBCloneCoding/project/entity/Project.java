@@ -19,10 +19,16 @@ public class Project extends TimeStamp {
     private Long projectId;
 
     @Column(nullable = false)
+    private String category;
+
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String summary;
+
+    @Column(nullable = true)
+    private String content;
 
     @Column(nullable = false)
     private Long goalPrice;
@@ -33,17 +39,29 @@ public class Project extends TimeStamp {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
+
     @ManyToOne
     @JoinColumn(name = "Member_Id", nullable = false)
     private Member member;
 
     @Builder
-    public Project(String title, String summary, Long goalPrice, LocalDateTime startDate, LocalDateTime endDate, Member member) {
+    public Project(String category, String title, String summary, String content, Long goalPrice, LocalDateTime startDate, LocalDateTime endDate, Member member) {
+        this.category = category;
         this.title = title;
         this.summary = summary;
+        this.content = content;
         this.goalPrice = goalPrice;
         this.startDate = startDate;
         this.endDate = endDate;
         this.member = member;
+    }
+
+    public void update(ProjectUpdateRequestDto projectUpdateRequestDto) {
+        this.category = projectUpdateRequestDto.getCategory();
+        this.title = projectUpdateRequestDto.getTitle();
+        this.summary = projectUpdateRequestDto.getSummary();
+        this.goalPrice = projectUpdateRequestDto.getGoalPrice();
+        this.startDate = projectUpdateRequestDto.getStartDate();
+        this.endDate = projectUpdateRequestDto.getEndDate();
     }
 }
