@@ -11,9 +11,7 @@ import java.util.TimeZone;
 @SpringBootApplication
 @EnableJpaAuditing
 public class TbbCloneCodingApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(TbbCloneCodingApplication.class, args);
 	}
-
 }
