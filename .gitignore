@@ -29,3 +29,5 @@ HELP.md
 .gradle
 .idea
 .DS_Store
+
+application-private.properties
