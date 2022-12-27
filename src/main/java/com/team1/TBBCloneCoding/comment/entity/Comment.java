@@ -22,12 +22,6 @@ public class Comment extends TimeStamp {
     @Column(nullable = false)
     private String contents;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt;
-
     @ManyToOne
     @JoinColumn(name = "Project_Id", nullable = false)
     private Project project;

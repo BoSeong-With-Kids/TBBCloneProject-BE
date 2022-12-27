@@ -54,7 +54,7 @@ public class CommentService {
 
         List<CommentResponseDto> allCommentResponseDto = new ArrayList<>();
 
-        List<Comment> comments = commentRepository.findAllByOrderByLastModifiedAtDesc();
+        List<Comment> comments = commentRepository.findAllByOrderByModifiedAtDesc();
 
         for(Comment comment : comments) {
 

@@ -1,12 +1,12 @@
 package com.team1.TBBCloneCoding.project.mapper;
 
 import com.team1.TBBCloneCoding.project.dto.ProjectDetailsReadResponseDto;
-import com.team1.TBBCloneCoding.project.entity.Image;
 import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.project.dto.ProjectCreateRequestDto;
 import com.team1.TBBCloneCoding.project.dto.ProjectUpdateRequestDto;
 import com.team1.TBBCloneCoding.project.dto.ProjectListResponseDto;
 import com.team1.TBBCloneCoding.project.entity.Project;
+import com.team1.TBBCloneCoding.project.entity.ProjectImage;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class ProjectMapper {
 
-    public ProjectDetailsReadResponseDto entityToProjectDetailsReadResponseDto(Project project, Long totalSupport, int supporterCount, boolean isMine, int projectLike, List<Image> thumbnailImageList) {
+    public ProjectDetailsReadResponseDto entityToProjectDetailsReadResponseDto(Project project, Long totalSupport, int supporterCount, boolean isMine, int projectLike, List<ProjectImage> thumbnailImageList) {
         return ProjectDetailsReadResponseDto.builder()
                 .category(project.getCategory())
                 .title(project.getTitle())

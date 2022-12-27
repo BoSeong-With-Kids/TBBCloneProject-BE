@@ -56,12 +56,5 @@ public class Project extends TimeStamp {
         this.member = member;
     }
 
-    public void update(ProjectUpdateRequestDto projectUpdateRequestDto) {
-        this.category = projectUpdateRequestDto.getCategory();
-        this.title = projectUpdateRequestDto.getTitle();
-        this.summary = projectUpdateRequestDto.getSummary();
-        this.goalPrice = projectUpdateRequestDto.getGoalPrice();
-        this.startDate = projectUpdateRequestDto.getStartDate();
-        this.endDate = projectUpdateRequestDto.getEndDate();
-    }
+
 }

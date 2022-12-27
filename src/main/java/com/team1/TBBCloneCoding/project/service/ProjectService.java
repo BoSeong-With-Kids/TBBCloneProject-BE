@@ -4,22 +4,16 @@ import com.team1.TBBCloneCoding.comment.entity.Comment;
 import com.team1.TBBCloneCoding.comment.repository.CommentRepository;
 import com.team1.TBBCloneCoding.common.dto.ResponseDto;
 import com.team1.TBBCloneCoding.member.entity.Member;
+import com.team1.TBBCloneCoding.member.repository.MemberRepository;
+import com.team1.TBBCloneCoding.project.dto.*;
+import com.team1.TBBCloneCoding.project.entity.*;
 import com.team1.TBBCloneCoding.project.entity.Project;
 import com.team1.TBBCloneCoding.project.entity.Support;
-import com.team1.TBBCloneCoding.common.dto.ResponseDto;
-import com.team1.TBBCloneCoding.member.entity.Member;
-import com.team1.TBBCloneCoding.project.dto.ProjectCreateRequestDto;
-import com.team1.TBBCloneCoding.project.dto.ProjectUpdateRequestDto;
-import com.team1.TBBCloneCoding.project.entity.Image;
-import com.team1.TBBCloneCoding.project.dto.ProjectListResponseDto;
-import com.team1.TBBCloneCoding.project.dto.ProjectDetailsReadResponseDto;
-import com.team1.TBBCloneCoding.project.entity.Image;
-import com.team1.TBBCloneCoding.project.entity.Like;
-import com.team1.TBBCloneCoding.project.entity.Project;
-import com.team1.TBBCloneCoding.project.entity.Support;
+import com.team1.TBBCloneCoding.project.mapper.ProjectLikeMapper;
 import com.team1.TBBCloneCoding.project.mapper.ProjectMapper;
-import com.team1.TBBCloneCoding.project.repository.ImageReposirory;
-import com.team1.TBBCloneCoding.project.repository.LikeRepository;
+import com.team1.TBBCloneCoding.project.mapper.SupportMapper;
+import com.team1.TBBCloneCoding.project.repository.ProjectImageRepository;
+import com.team1.TBBCloneCoding.project.repository.ProjectLikeRepository;
 import com.team1.TBBCloneCoding.project.repository.ProjectRepository;
 import com.team1.TBBCloneCoding.project.repository.SupportRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,30 +21,75 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
+    private final MemberRepository memberRepository;
     private final ProjectRepository projectRepository;
     private final SupportRepository supportRepository;
     private final CommentRepository commentRepository;
-    private final SupportRepository supportRepository;
     private final ProjectMapper projectMapper;
-    private final SupportRepository supportRepository;
-    
+    private final SupportMapper supportMapper;
+    private final ProjectLikeMapper projectLikeMapper;
+    private final ProjectLikeRepository projectLikeRepository;
+    private final ProjectImageRepository projectImageRepository;
+
+    @Transactional
+    public ResponseDto createProject(ProjectCreateRequestDto projectCreateRequestDto, Member member) {
+        Project project = projectMapper.toEntity(projectCreateRequestDto, member);
+        projectRepository.save(project);
+
+        ProjectImage image;
+        List<Long> thumbnailListNumber = projectCreateRequestDto.getThumbnailList();
+        for(Long i : thumbnailListNumber){
+            image = projectImageRepository.findById(i).orElseThrow(
+                    () -> new NullPointerException("id에 맞는 이미지가 썸네일이미지 데이터베이스에 존재하지 않습니다.")
+            );
+            image.thumbnailImageConnectionWithProject(project);
+        }
+
+        List<Long> imageNumberList = projectCreateRequestDto.getContentImageList();
+        for(Long i : imageNumberList){
+            // 저장된 이미지를 레포지토리 가져와서 연결
+            image = projectImageRepository.findById(i).orElseThrow(
+                    () -> new NullPointerException("id에 맞는 이미지가 콘텐트이미지 데이터베이스에 존재하지 않습니다.")
+            );
+            image.contentImageConnectionWithProject(project);
+        }
+
+        return new ResponseDto("success","프로젝트 등록에 성공하셨습니다.",null);
+    }
+
+    @Transactional
+    public ResponseDto updateProject(Long projectId, ProjectUpdateRequestDto projectUpdateRequestDto, Member member) {
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new IllegalArgumentException("projectId로 데이터베이스에서 프로젝트를 찾을 수 없습니다.")
+        );
+
+        if (!member.getLoginId().equals(project.getMember().getLoginId())) {
+            throw new IllegalArgumentException("프로젝트를 생성한 사용자가 아닙니다.");
+        }
+
+        //project.update(dto.get---, dto.get---);
+        project = projectMapper.projectUpdateRequestDtoToEntity(projectUpdateRequestDto);
+
+        return new ResponseDto("success", "프로젝트 수정에 성공했습니다.", null);
+    }
+
     @Transactional(readOnly = true)
     public ResponseDto getProjectList(String filter, String category) {
 
-
         List<Project> projectList;
+
         // filter에 따라서 정렬순서변경
-        if(filter.equals("oldest")){
+        if (filter.equals("oldest")) {
             // 오래된순
             projectList = projectRepository.findAllByCategoryOrderByCreatedAtAsc(category);
-        }
-        else if(filter.equals("popular")){
+        } else if (filter.equals("popular")) {
             // 인기순
-           projectList = projectRepository.findAllByCategoryOrderByRecommendCountDesc(category);
+            projectList = projectRepository.findAllByCategoryOrderByCreatedAtAsc(category);
         }
         // 기본값 : 최신순 filter(latest)
         projectList = projectRepository.findAllByCategoryOrderByCreatedAtDesc(category);
@@ -59,7 +98,7 @@ public class ProjectService {
         ProjectListResponseDto projectListResponseDto;
         List<Support> supportList;
         List<ProjectListResponseDto> projectListResponseDtoList = new ArrayList<>();
-        for(Project project : projectList){
+        for (Project project : projectList) {
 
             // totalSupport, percent 변수선언, goalPrice 불러오기
             Long totalSupport = 0L;
@@ -68,7 +107,7 @@ public class ProjectService {
 
             // totalSupport 구하기
             supportList = supportRepository.findAllByProject(project);
-            for(Support support : supportList){
+            for (Support support : supportList) {
                 totalSupport = totalSupport + support.getSupportAmount();
             }
 
@@ -80,9 +119,9 @@ public class ProjectService {
             Long longPercent = percent.longValue();
 
             // 좋아요 갯수 반환
-            int projectLike = likeRepository.findAllByProject(project).size();
+            int projectLike = projectLikeRepository.findAllByProject(project).size();
 
-            projectListResponseDto = projectMapper.entityToProjectListResponseDto(project,totalSupport,longPercent,projectLike);
+            projectListResponseDto = projectMapper.entityToProjectListResponseDto(project, totalSupport, longPercent, projectLike);
             projectListResponseDtoList.add(projectListResponseDto);
         }
 
@@ -100,141 +139,84 @@ public class ProjectService {
         List<Support> supportList = supportRepository.findAllByProject(project);
         int supporterCount = supportList.size();
         Long totalSupport = 0L;
-        for(Support support : supportList){
+        for (Support support : supportList) {
             // totalSupport
             totalSupport = totalSupport + support.getSupportAmount();
         }
-        List<Long> imageNumberList = projectCreateRequestDto.getContentImageList();
-        for(Long i : imageNumberList){
-            // 저장된 이미지를 레포지토리 가져와서 연결
-            image = imageReposirory.findById(i).orElseThrow(
-                    () -> new NullPointerException("id에 맞는 이미지가 콘텐트이미지 데이터베이스에 존재하지 않습니다.")
-            );
-            image.contentImageConnectionWithProject(project);
-        }
-        return new ResponseDto("success","프로젝트 등록에 성공하셨습니다.",null);
-    }
 
         // ProjectDetails를 불러오는 사람이 이 프로젝트를 올린 사람인지 확인하는 로직 :: 같은 사람이 맞다면 => "isMine = true", 같은 사람이 아니면 => "isMine = false"
         boolean isMine = false;
-        if(member.getMemberId() == project.getMember().getMemberId()){
+        if (member.getMemberId() == project.getMember().getMemberId()) {
             isMine = true;
         }
 
-    @Transactional(readOnly = true)
-    public ResponseDto getProjectList(String filter, String category) {
-        int projectLike = likeRepository.findAllByProject(project).size();
+        int projectLike = projectLikeRepository.findAllByProject(project).size();
 
         // 이미지 데이터베이스에서 project에 연관된 thumbnailImage 리스트를 불러오기(프로젝트, 문자열인풋하기)
-        List<Image> thumbnailImageList = imageReposirory.findAllByProjectAndWhichContent(project,"thumbnailImage");
+        List<ProjectImage> thumbnailImageList = projectImageRepository.findAllByProjectAndWhichContent(project, "thumbnailImage");
 
-        List<Project> projectList;
-        // filter에 따라서 정렬순서변경
-        if(filter.equals("oldest")){
-            // 오래된순
-            projectList = projectRepository.findAllByCategoryOrderByCreatedAtAsc(category);
-        }
-        else if(filter.equals("popular")){
-            // 인기순
-           projectList = projectRepository.findAllByCategoryOrderByRecommendCountDesc(category);
-        }
-        // 기본값 : 최신순 filter(latest)
-        projectList = projectRepository.findAllByCategoryOrderByCreatedAtDesc(category);
-
-        // projectList에서 project를 뽑아서 projectListResponseDto로 변환해서 전달
-        ProjectListResponseDto projectListResponseDto;
-        List<Support> supportList;
-        List<ProjectListResponseDto> projectListResponseDtoList = new ArrayList<>();
-        for(Project project : projectList){
-
-            // totalSupport, percent 변수선언, goalPrice 불러오기
-            Long totalSupport = 0L;
-            Long goalPrice = project.getGoalPrice();
-            Double percent = 0.0;
-
-            // totalSupport 구하기
-            supportList = supportRepository.findAllByProject(project);
-            for(Support support : supportList){
-                totalSupport = totalSupport + support.getSupportAmount();
-            }
-
-            // percent = totalSupport/goalPrice
-            percent = Double.valueOf(totalSupport / goalPrice);
-
-            // percent 소숫점 자르기
-            percent = Math.floor(percent);
-            Long longPercent = percent.longValue();
-
-            // 좋아요 갯수 반환
-            int projectLike = likeRepository.findAllByProject(project).size();
-
-            projectListResponseDto = projectMapper.entityToProjectListResponseDto(project,totalSupport,longPercent,projectLike);
-            projectListResponseDtoList.add(projectListResponseDto);
-        }
-
-        return new ResponseDto("success", "프로젝트 리스트 조회에 성공했습니다.", projectListResponseDtoList);
         ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine, projectLike, thumbnailImageList);
-        return new ResponseDto("success","리스트 조회 성공", projectDetailsReadResponseDto);
+        return new ResponseDto("success", "리스트 조회 성공", projectDetailsReadResponseDto);
     }
 
     @Transactional
-    public ResponseDto createSupport(Member member, Long projectId, SupportCreateRequestDto supportCreateRequestDto){
+    public ResponseDto deleteProject(Long projectId) {
+        // project에 저장된 댓글 전부 삭제
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new NullPointerException("projectId로 Project를 찾을 수 없습니다.")
+        );
+
+        List<Comment> commentList = commentRepository.findAllByProject(project);
+        for (Comment comment : commentList) {
+            commentRepository.delete(comment);
+        }
+
+        List<Support> supportList = supportRepository.findAllByProject(project);
+        for (Support support : supportList) {
+            supportRepository.delete(support);
+        }
+
+        return new ResponseDto("success", "프로젝트 삭제 및 관련댓글삭제 성공", null);
+    }
+
+    @Transactional
+    public ResponseDto createSupport(Member member, Long projectId, SupportCreateRequestDto supportCreateRequestDto) {
 
         Long memberId = member.getMemberId();
 
         Member memberForCreateSupport = memberRepository.findById(memberId).orElseThrow(
-            () -> new NullPointerException()
+                () -> new NullPointerException()
         );
 
         Project project = projectRepository.findById(projectId).orElseThrow(
-            () -> new NullPointerException()
+                () -> new NullPointerException()
         );
 
         Support support = supportMapper.toSupport(memberForCreateSupport, project, supportCreateRequestDto);
 
         supportRepository.save(support);
 
-        return new ResponseDto("success","후원 성공", null);
+        return new ResponseDto("success", "후원 성공", null);
+
     }
 
     @Transactional
-    public ResponseDto createProjectLike(Member member, Long projectId){
+    public ResponseDto createProjectLike(Member member, Long projectId) {
 
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시물 입니다.")
         );
-        
+
         Optional<ProjectLike> findProjectLike = projectLikeRepository.findByProjectAndMember(project, member);
 
-        if(findProjectLike.isPresent()){
+        if (findProjectLike.isPresent()) {
             projectLikeRepository.deleteByProjectAndMember(project, member);
-            return new ResponseDto("success","좋아요 취소 성공", null);
+            return new ResponseDto("success", "좋아요 취소 성공", null);
         }
 
         ProjectLike projectLike = projectLikeMapper.toProjectLike(member, project);
         projectLikeRepository.save(projectLike);
 
-        return new ResponseDto("success","좋아요 등록 성공", null);
+        return new ResponseDto("success", "좋아요 등록 성공", null);
     }
-    
-    @Transactional
-    public ResponseDto deleteProject(Long projectId) {
-    // project에 저장된 댓글 전부 삭제
-    Project project = projectRepository.findById(projectId).orElseThrow(
-            () -> new NullPointerException("projectId로 Project를 찾을 수 없습니다.")
-    );
-
-    List<Comment> commentList = commentRepository.findAllByProject(project);
-    for(Comment comment : commentList) {
-        commentRepository.delete(comment);
-    }
-
-    List<Support> supportList = supportRepository.findAllByProject(project);
-    for(Support support : supportList){
-        supportRepository.delete(support);
-    }
-
-    return new ResponseDto("success", "프로젝트 삭제 및 관련댓글삭제 성공",null);
-    }
-
 }
