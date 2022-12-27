@@ -97,7 +97,7 @@ public class CommentService {
     @Transactional
     public ResponseDto deleteComment(Member member, Long commentId){
 
-        Long memberId = member.getmemberId();
+        Long memberId = member.getMemberId();
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new NullPointerException()
