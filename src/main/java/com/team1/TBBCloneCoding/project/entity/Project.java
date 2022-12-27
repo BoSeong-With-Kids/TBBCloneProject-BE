@@ -27,6 +27,9 @@ public class Project extends TimeStamp {
     @Column(nullable = false)
     private String summary;
 
+    @Column(nullable = true)
+    private String content;
+
     @Column(nullable = false)
     private Long goalPrice;
 
@@ -42,10 +45,11 @@ public class Project extends TimeStamp {
     private Member member;
 
     @Builder
-    public Project(String category, String title, String summary, Long goalPrice, LocalDateTime startDate, LocalDateTime endDate, Member member) {
+    public Project(String category, String title, String summary, String content, Long goalPrice, LocalDateTime startDate, LocalDateTime endDate, Member member) {
         this.category = category;
         this.title = title;
         this.summary = summary;
+        this.content = content;
         this.goalPrice = goalPrice;
         this.startDate = startDate;
         this.endDate = endDate;

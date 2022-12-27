@@ -14,5 +14,7 @@ public class ProjectDetailsReadResponseDto {
     private Long goalPrice;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private int projectLike;
+    private String content;
     private boolean projectIsMine;
 }

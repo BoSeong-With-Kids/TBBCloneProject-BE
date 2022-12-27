@@ -3,9 +3,11 @@ package com.team1.TBBCloneCoding.project.service;
 import com.team1.TBBCloneCoding.common.dto.ResponseDto;
 import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.project.dto.ProjectDetailsReadResponseDto;
+import com.team1.TBBCloneCoding.project.entity.Like;
 import com.team1.TBBCloneCoding.project.entity.Project;
 import com.team1.TBBCloneCoding.project.entity.Support;
 import com.team1.TBBCloneCoding.project.mapper.ProjectMapper;
+import com.team1.TBBCloneCoding.project.repository.LikeRepository;
 import com.team1.TBBCloneCoding.project.repository.ProjectRepository;
 import com.team1.TBBCloneCoding.project.repository.SupportRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final SupportRepository supportRepository;
     private final ProjectMapper projectMapper;
+    private final LikeRepository likeRepository;
 
 
     @Transactional(readOnly = true)
@@ -43,7 +46,10 @@ public class ProjectService {
         if(member.getMemberId() == project.getMember().getMemberId()){
             isMine = true;
         }
-        ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine);
+
+        int projectLike = likeRepository.findAllByProject(project).size();
+
+        ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine, projectLike);
         return new ResponseDto("success","리스트 조회 성공", projectDetailsReadResponseDto);
     }
 
