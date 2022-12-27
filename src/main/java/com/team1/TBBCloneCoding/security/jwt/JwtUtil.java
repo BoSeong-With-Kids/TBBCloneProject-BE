@@ -1,7 +1,6 @@
 package com.team1.TBBCloneCoding.security.jwt;
 
 
-import com.team1.TBBCloneCoding.member.entity.MemberRoleEnum;
 import com.team1.TBBCloneCoding.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -28,10 +27,8 @@ public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-//    private static final long TOKEN_TIME = 60 * 60 * 1000L;
-
-    @Value("${token_time}")
-    private String token_time;
+//    @Value("${token_time}")
+//    private String token_time;
 
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -45,8 +42,6 @@ public class JwtUtil {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
     }
-
-    // header 토큰을 가져오기
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
@@ -54,23 +49,18 @@ public class JwtUtil {
         }
         return null;
     }
-
-    // 토큰 생성
-    //
-    public String createToken(String username, MemberRoleEnum role) {
+    public String createToken(String Username) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
-                        .setSubject(username)
-                        .claim(AUTHORIZATION_KEY, role)
-                        .setExpiration(new Date(date.getTime() + Long.parseLong(token_time)))
+                        .setSubject(Username)
+//                        .setExpiration(new Date(date.getTime() + Long.parseLong(token_time)))
+                        .setExpiration(new Date(date.getTime() + 60 * 60 * 1000L))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
                         .compact();
     }
-
-    // 토큰 검증
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -86,15 +76,11 @@ public class JwtUtil {
         }
         return false;
     }
-
-    // 토큰에서 사용자 정보 가져오기
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
-
-    // 인증 객체 생성
-    public Authentication createAuthentication(String username) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+    public Authentication createAuthentication(String Username) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(Username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 

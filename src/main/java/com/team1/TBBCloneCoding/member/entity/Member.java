@@ -17,7 +17,7 @@ public class Member extends TimeStamp {
     private Long memberId;
 
     @Column(nullable = false)
-    private String loginId;
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -25,25 +25,10 @@ public class Member extends TimeStamp {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
-    private String summary;
-
-    @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private MemberRoleEnum role;
-
     @Builder
-    public Member(String loginId, String password, String nickname, String summary) {
-        this.loginId = loginId;
+    public Member(String username, String password, String nickname) {
+        this.username = username;
         this.password = password;
         this.nickname = nickname;
-        this.summary = summary;
-    }
-
-    public Member(String loginId, String password, String nickname, MemberRoleEnum role) {
-        this.loginId = loginId;
-        this.password = password;
-        this.nickname = nickname;
-        this.role = role;
     }
 }

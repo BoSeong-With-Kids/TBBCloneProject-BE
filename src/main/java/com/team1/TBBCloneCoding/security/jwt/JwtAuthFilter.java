@@ -3,8 +3,8 @@ package com.team1.TBBCloneCoding.security.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
+import com.team1.TBBCloneCoding.common.dto.ResponseDto;
 import com.team1.TBBCloneCoding.common.exception.ExceptionMessage;
-import com.team1.TBBCloneCoding.common.exception.ExceptionResponse;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,11 +59,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     public void jwtExceptionHandler(HttpServletResponse response, ExceptionMessage exceptionMessage) {
         response.setStatus(exceptionMessage.getStatus());
-        //"application/json"에서
-        //"application/json; charset=utf8" 변경시 한글 에러메세지 가능!
         response.setContentType("application/json; charset=utf8");
         try {
-            String json = new ObjectMapper().writeValueAsString(new ExceptionResponse(exceptionMessage));
+            String json = new ObjectMapper().writeValueAsString(new ResponseDto("fail", exceptionMessage.getMsg(), null));
             response.getWriter().write(json);
         } catch (Exception e) {
             log.error(e.getMessage());
