@@ -16,5 +16,6 @@ public class ProjectCreateRequestDto {
     private Long goalPrice;
     private LocalDateTime statDate;
     private LocalDateTime endDate;
-    private List<Long> imageList;
+    private List<Long> thumbnailList;
+    private List<Long> contentImageList;
 }
