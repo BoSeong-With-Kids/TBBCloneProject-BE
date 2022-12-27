@@ -45,10 +45,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         setAuthentication(response, info.getSubject());
         filterChain.doFilter(request, response);
     }
-    public void setAuthentication(HttpServletResponse response,String username) {
+    public void setAuthentication(HttpServletResponse response,String loginId) {
         try {
             SecurityContext context = SecurityContextHolder.createEmptyContext();
-            Authentication authentication = jwtUtil.createAuthentication(username);
+            Authentication authentication = jwtUtil.createAuthentication(loginId);
             context.setAuthentication(authentication);
 
             SecurityContextHolder.setContext(context);

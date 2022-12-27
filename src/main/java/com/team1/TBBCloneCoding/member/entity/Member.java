@@ -17,7 +17,7 @@ public class Member extends TimeStamp {
     private Long memberId;
 
     @Column(nullable = false)
-    private String username;
+    private String loginId;
 
     @Column(nullable = false)
     private String password;
@@ -26,8 +26,8 @@ public class Member extends TimeStamp {
     private String nickname;
 
     @Builder
-    public Member(String username, String password, String nickname) {
-        this.username = username;
+    public Member(String loginId, String password, String nickname) {
+        this.loginId = loginId;
         this.password = password;
         this.nickname = nickname;
     }
