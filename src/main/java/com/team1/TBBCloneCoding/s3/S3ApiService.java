@@ -12,7 +12,7 @@ import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.project.dto.ProjectImageResponseDto;
 import com.team1.TBBCloneCoding.project.entity.ProjectImage;
 import com.team1.TBBCloneCoding.project.mapper.ProjectImageMapper;
-import com.team1.TBBCloneCoding.project.repository.ProjectImageReposirory;
+import com.team1.TBBCloneCoding.project.repository.ProjectImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class S3ApiService {
     private AmazonS3 s3Client;
-    private final ProjectImageReposirory projectImageReposirory;
+    private final ProjectImageRepository projectImageReposirory;
     private final ProjectImageMapper projectImageMapper;
 
     @Value("${cloud.aws.credentials.accessKey}")
@@ -132,7 +132,7 @@ public class S3ApiService {
             ProjectImage projectImage = projectImageReposirory.findById(id).orElseThrow(
                     () -> new IllegalArgumentException("프로젝트 이미지가 존재하지 않습니다.")
             );
-            projectImageReposirory.deleteByProjectImage(projectImage);
+            projectImageReposirory.deleteById(projectImage.getImageId());
             deleteS3(projectImage.getImageUrl());
         }
         return new ResponseDto("success","사진 삭제를 완료했습니다.", null);
