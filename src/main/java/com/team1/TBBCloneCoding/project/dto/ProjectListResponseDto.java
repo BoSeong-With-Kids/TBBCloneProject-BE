@@ -10,9 +10,10 @@ public class ProjectListResponseDto {
     private Long projectId;
     private String category;
     private String title;
+    private String summary;
     private String nickname;
     private Long totalSupport;
-    private Double percent;
+    private Long percent;
     private LocalDateTime endDate;
-    private String projectLike;
+    private int projectLike;
 }
