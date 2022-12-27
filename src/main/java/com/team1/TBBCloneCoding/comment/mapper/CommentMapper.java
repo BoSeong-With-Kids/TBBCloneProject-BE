@@ -17,6 +17,7 @@ public class CommentMapper {
     public CommentResponseDto toResponseDto(Comment comment, Boolean commentIsMine){
         return CommentResponseDto.builder()
                 .commentId(comment.getCommentId())
+                .nickname(comment.getMember().getNickname())
                 .contents(comment.getContents())
                 .createdAt(comment.getCreatedAt())
                 .modifiedAt(comment.getModifiedAt())
