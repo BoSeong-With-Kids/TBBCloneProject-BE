@@ -61,10 +61,10 @@ public class ProjectService {
 
         if(findProjectLike.isPresent()){
             projectLikeRepository.deleteByProjectAndMember(project, member);
+            return new ResponseDto("success","좋아요 취소 성공", null);
         }
 
         ProjectLike projectLike = projectLikeMapper.toProjectLike(member, project);
-
         projectLikeRepository.save(projectLike);
 
         return new ResponseDto("success","좋아요 등록 성공", null);
