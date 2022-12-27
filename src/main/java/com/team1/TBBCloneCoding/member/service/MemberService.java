@@ -28,21 +28,12 @@ public class MemberService {
         String password = passwordEncoder.encode(signupRequestDto.getPassword());
         String nickname = signupRequestDto.getNickname();
 
-        System.out.println("오류 : " + 1);
-        //회원 중복확인
-//        Member foudedMember = memberRepository.findByUsername(username).orElseThrow(
-//                () -> new IllegalArgumentException("회원을 찾을 수 없습니다.")
-//        );
-        //
         Optional<Member> newPerson = memberRepository.findByUsername(username);
 
         if(newPerson.isEmpty()) {
             Member member = new Member(username, password, nickname);
             memberRepository.save(member);
         }
-        System.out.println("오류 : " + 2);
-
-        System.out.println("오류 : " + 3);
     }
 
     @Transactional
