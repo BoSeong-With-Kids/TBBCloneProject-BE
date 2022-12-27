@@ -4,4 +4,7 @@ import com.team1.TBBCloneCoding.project.entity.ProjectImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProjectImageReposirory extends JpaRepository<ProjectImage, Long> {
+    ProjectImage findByImageUrl(String uploadImageUrl);
+
+    void deleteByProjectImage(ProjectImage projectImage);
 }
