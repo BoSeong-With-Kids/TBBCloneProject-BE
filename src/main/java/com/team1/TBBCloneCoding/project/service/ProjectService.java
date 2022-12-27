@@ -67,7 +67,7 @@ public class ProjectService {
 
         projectLikeRepository.save(projectLike);
 
-        return new ResponseDto("success","후원 성공", null);
+        return new ResponseDto("success","좋아요 등록 성공", null);
     }
 
 }
