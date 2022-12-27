@@ -2,11 +2,13 @@ package com.team1.TBBCloneCoding.project.entity;
 
 import com.team1.TBBCloneCoding.common.entity.TimeStamp;
 import com.team1.TBBCloneCoding.member.entity.Member;
+import com.team1.TBBCloneCoding.project.dto.ProjectUpdateRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -53,5 +55,14 @@ public class Project extends TimeStamp {
         this.startDate = startDate;
         this.endDate = endDate;
         this.member = member;
+    }
+
+    public void update(ProjectUpdateRequestDto projectUpdateRequestDto) {
+        this.category = projectUpdateRequestDto.getCategory();
+        this.title = projectUpdateRequestDto.getTitle();
+        this.summary = projectUpdateRequestDto.getSummary();
+        this.goalPrice = projectUpdateRequestDto.getGoalPrice();
+        this.startDate = projectUpdateRequestDto.getStartDate();
+        this.endDate = projectUpdateRequestDto.getEndDate();
     }
 }
