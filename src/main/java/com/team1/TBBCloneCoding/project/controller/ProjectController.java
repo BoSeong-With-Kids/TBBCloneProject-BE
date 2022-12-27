@@ -9,8 +9,6 @@ import com.team1.TBBCloneCoding.project.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -48,4 +46,10 @@ public class ProjectController {
         return new ResponseEntity(responseDto, HttpStatus.OK);
         ResponseDto responseDto = projectService.createProject(projectCreateRequestDto, userDetails.getMember());
     }
+    @GetMapping("/list")
+    public ResponseEntity<ResponseDto> getProjectList(@RequestParam("filter") String filter, @RequestParam("category") String category) {
+        ResponseDto responseDto = projectService.getProjectList(filter, category);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
 }
