@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/tumblebug")
@@ -26,24 +24,23 @@ public class ProjectController {
     public ResponseEntity<ResponseDto> getProjectDetails(@PathVariable Long projectId,  @AuthenticationPrincipal UserDetailsImpl userDetails){
         ResponseDto responseDto = projectService.getProjectDetails(projectId, userDetails.getMember());
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+    
     @PutMapping("/{projectId}")
     public ResponseEntity<ResponseDto> updateProject(@PathVariable Long projectId, @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         ResponseDto responseDto = projectService.updateProject(projectId, projectUpdateRequestDto, userDetails.getMember());
         return new ResponseEntity(responseDto, HttpStatus.OK);
-        
+    }
+    
     @PostMapping("/project/supporting/{projectId}")
     public ResponseEntity<ResponseDto> createSuppport(Member member, @PathVariable Long projectId, @RequestBody SupportCreateRequestDto supportCreateRequestDto){
-
         ResponseDto responseDto = projectService.createSupport(member, projectId, supportCreateRequestDto);
-
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
     @PostMapping("/project/like/{projectId}")
     public ResponseEntity<ResponseDto> createProjectLike(Member member, @PathVariable Long projectId){
-
         ResponseDto responseDto = projectService.createProjectLike(member, projectId);
-
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
@@ -52,11 +49,16 @@ public class ProjectController {
         return new ResponseEntity(responseDto, HttpStatus.OK);
         ResponseDto responseDto = projectService.createProject(projectCreateRequestDto, userDetails.getMember());
     }
+    
     @GetMapping("/list")
     public ResponseEntity<ResponseDto> getProjectList(@RequestParam("filter") String filter, @RequestParam("category") String category) {
         ResponseDto responseDto = projectService.getProjectList(filter, category);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
-
-
+    
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<ResponseDto> deleteProject(@PathVariable Long id){
+        ResponseDto responseDto = projectService.deleteProject(id);
+        return new ResponseEntity(responseDto,HttpStatus.OK);
+    }
 }

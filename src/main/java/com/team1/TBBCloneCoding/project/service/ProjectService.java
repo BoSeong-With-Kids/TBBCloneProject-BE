@@ -1,5 +1,11 @@
 package com.team1.TBBCloneCoding.project.service;
 
+import com.team1.TBBCloneCoding.comment.entity.Comment;
+import com.team1.TBBCloneCoding.comment.repository.CommentRepository;
+import com.team1.TBBCloneCoding.common.dto.ResponseDto;
+import com.team1.TBBCloneCoding.member.entity.Member;
+import com.team1.TBBCloneCoding.project.entity.Project;
+import com.team1.TBBCloneCoding.project.entity.Support;
 import com.team1.TBBCloneCoding.common.dto.ResponseDto;
 import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.project.dto.ProjectCreateRequestDto;
@@ -26,15 +32,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final LikeRepository likeRepository;
-    private final ImageReposirory imageReposirory;
+    private final SupportRepository supportRepository;
+    private final CommentRepository commentRepository;
     private final SupportRepository supportRepository;
     private final ProjectMapper projectMapper;
     private final SupportRepository supportRepository;
-    private final LikeRepository likeRepository;
     
     @Transactional(readOnly = true)
     public ResponseDto getProjectList(String filter, String category) {
+
 
         List<Project> projectList;
         // filter에 따라서 정렬순서변경
@@ -54,26 +60,34 @@ public class ProjectService {
         List<Support> supportList;
         List<ProjectListResponseDto> projectListResponseDtoList = new ArrayList<>();
         for(Project project : projectList){
+
             // totalSupport, percent 변수선언, goalPrice 불러오기
             Long totalSupport = 0L;
             Long goalPrice = project.getGoalPrice();
             Double percent = 0.0;
+
+            // totalSupport 구하기
+            supportList = supportRepository.findAllByProject(project);
+            for(Support support : supportList){
+                totalSupport = totalSupport + support.getSupportAmount();
+            }
+
+            // percent = totalSupport/goalPrice
+            percent = Double.valueOf(totalSupport / goalPrice);
+
+            // percent 소숫점 자르기
+            percent = Math.floor(percent);
+            Long longPercent = percent.longValue();
+
+            // 좋아요 갯수 반환
+            int projectLike = likeRepository.findAllByProject(project).size();
+
+            projectListResponseDto = projectMapper.entityToProjectListResponseDto(project,totalSupport,longPercent,projectLike);
+            projectListResponseDtoList.add(projectListResponseDto);
         }
-        //project.update(projectUpdateRequestDto);
-        project = projectMapper.projectUpdateRequestDtoToEntity(projectUpdateRequestDto);
 
-        return new ResponseDto("success","프로젝트 수정에 성공했습니다.",null);
-    public ResponseDto createProject(ProjectCreateRequestDto projectCreateRequestDto, Member member) {
-        Project project = projectMapper.toEntity(projectCreateRequestDto, member);
-        projectRepository.save(project);
-
-        Image image;
-        List<Long> thumbnailListNumber = projectCreateRequestDto.getThumbnailList();
-        for(Long i : thumbnailListNumber){
-            image = imageReposirory.findById(i).orElseThrow(
-                    () -> new NullPointerException("id에 맞는 이미지가 썸네일이미지 데이터베이스에 존재하지 않습니다.")
-            );
-            image.thumbnailImageConnectionWithProject(project);
+        return new ResponseDto("success", "프로젝트 리스트 조회에 성공했습니다.", projectListResponseDtoList);
+    }
 
     @Transactional(readOnly = true)
     public ResponseDto getProjectDetails(Long projectId, Member member) {
@@ -183,8 +197,8 @@ public class ProjectService {
         return new ResponseDto("success","후원 성공", null);
     }
 
-    public ResponseDto createProjectLike(Member member, Long projectId){
     @Transactional
+    public ResponseDto createProjectLike(Member member, Long projectId){
 
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시물 입니다.")
@@ -201,6 +215,26 @@ public class ProjectService {
         projectLikeRepository.save(projectLike);
 
         return new ResponseDto("success","좋아요 등록 성공", null);
+    }
+    
+    @Transactional
+    public ResponseDto deleteProject(Long projectId) {
+    // project에 저장된 댓글 전부 삭제
+    Project project = projectRepository.findById(projectId).orElseThrow(
+            () -> new NullPointerException("projectId로 Project를 찾을 수 없습니다.")
+    );
+
+    List<Comment> commentList = commentRepository.findAllByProject(project);
+    for(Comment comment : commentList) {
+        commentRepository.delete(comment);
+    }
+
+    List<Support> supportList = supportRepository.findAllByProject(project);
+    for(Support support : supportList){
+        supportRepository.delete(support);
+    }
+
+    return new ResponseDto("success", "프로젝트 삭제 및 관련댓글삭제 성공",null);
     }
 
 }
