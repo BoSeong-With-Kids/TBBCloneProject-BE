@@ -24,6 +24,7 @@ public class ProjectMapper {
                 .category(projectCreateRequestDto.getCategory())
                 .title(projectCreateRequestDto.getTitle())
                 .summary(projectCreateRequestDto.getSummary())
+                .content(projectCreateRequestDto.getContent())
                 .goalPrice(projectCreateRequestDto.getGoalPrice())
                 .startDate(projectCreateRequestDto.getEndDate())
                 .endDate(projectCreateRequestDto.getEndDate())
