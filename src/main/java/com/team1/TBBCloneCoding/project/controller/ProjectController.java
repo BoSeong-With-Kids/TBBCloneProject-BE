@@ -26,4 +26,12 @@ public class ProjectController {
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
+    @PostMapping("/project/like/{projectId}")
+    public ResponseEntity<ResponseDto> createProjectLike(Member member, @PathVariable Long projectId){
+
+        ResponseDto responseDto = projectService.createProjectLike(member, projectId);
+
+        return new ResponseEntity(responseDto, HttpStatus.OK);
+    }
+
 }
