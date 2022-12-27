@@ -33,17 +33,11 @@ public class CommentService {
     @Transactional
     public ResponseDto createComment(Member member, Long projectId, CommentCreateRequestDto commentCreateRequestDto){
 
-        Long memberId = member.getMemberId();
-
-        Member memberForCreateComment = memberRepository.findById(memberId).orElseThrow(
-                () -> new NullPointerException()
-        );
-
         Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new NullPointerException()
+                () -> new IllegalArgumentException("존재하지 않는 게시물 입니다.")
         );
 
-        Comment comment = commentMapper.toComment(memberForCreateComment, commentCreateRequestDto, project);
+        Comment comment = commentMapper.toComment(member, commentCreateRequestDto, project);
 
         commentRepository.save(comment);
 
@@ -80,7 +74,7 @@ public class CommentService {
         Long memberId = member.getMemberId();
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new NullPointerException("해당 코멘트를 찾을 수 없습니다")
+                () -> new IllegalArgumentException("해당 댓글 찾을 수 없습니다")
         );
 
         if(comment.getMember().getMemberId().equals(memberId)){
@@ -100,7 +94,7 @@ public class CommentService {
         Long memberId = member.getMemberId();
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new NullPointerException()
+                () -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다.")
         );
 
         if(comment.getMember().getMemberId().equals(memberId)){

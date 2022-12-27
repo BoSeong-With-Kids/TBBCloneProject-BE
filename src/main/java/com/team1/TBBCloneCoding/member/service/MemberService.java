@@ -31,7 +31,7 @@ public class MemberService {
         // 로그인 ID 중복 확인
         Optional<Member> loginIdDuplicateCheck = memberRepository.findByLoginId(loginId);
         if(loginIdDuplicateCheck.isPresent()) {
-            throw new IllegalArgumentException("이미 존재하는 닉네임 입니다.");
+            throw new IllegalArgumentException("이미 존재하는 아이디 입니다.");
         }
 
         // 닉네임 중복 확인
