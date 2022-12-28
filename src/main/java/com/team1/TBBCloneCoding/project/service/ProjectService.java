@@ -70,16 +70,12 @@ public class ProjectService {
     }
 
     @Transactional
-    public ResponseDto updateProject(Long projectId, ProjectUpdateRequestDto projectUpdateRequestDto) {
+    public ResponseDto updateProject(Long projectId, ProjectUpdateRequestDto request) {
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new IllegalArgumentException("projectId로 데이터베이스에서 프로젝트를 찾을 수 없습니다.")
         );
 
-
-
-        //project.update(dto.get---, dto.get---);
-        project = projectMapper.projectUpdateRequestDtoToEntity(projectUpdateRequestDto);
-
+        project.update(request.getCategory(), request.getTitle(), request.getSummary(), request.getContent(), request.getGoalPrice(), request.getStartDate(), request.getEndDate());
         return new ResponseDto("success", "프로젝트 수정에 성공했습니다.", null);
     }
 
@@ -91,13 +87,25 @@ public class ProjectService {
         // filter에 따라서 정렬순서변경
         if (filter.equals("oldest")) {
             // 오래된순
-            projectList = projectRepository.findAllByCategoryOrderByCreatedAtAsc(category);
+            if (category.equals("all")) {
+                projectList = projectRepository.findAllByOrderByCreatedAtAsc();
+            } else {
+                projectList = projectRepository.findAllByCategoryOrderByCreatedAtAsc(category);
+            }
         } else if (filter.equals("popular")) {
             // 인기순
-            projectList = projectRepository.findAllByCategoryOrderByCreatedAtAsc(category);
+            if (category.equals("all")) {
+                projectList = projectRepository.findAllByOrderByCreatedAtAsc();
+            } else {
+                projectList = projectRepository.findAllByCategoryOrderByCreatedAtAsc(category);
+            }
         }
         // 기본값 : 최신순 filter(latest)
-        projectList = projectRepository.findAllByCategoryOrderByCreatedAtDesc(category);
+        if (category.equals("all")) {
+            projectList = projectRepository.findAllByOrderByCreatedAtDesc();
+        } else {
+            projectList = projectRepository.findAllByCategoryOrderByCreatedAtDesc(category);
+        }
 
         // projectList에서 project를 뽑아서 projectListResponseDto로 변환해서 전달
         ProjectListResponseDto projectListResponseDto;
@@ -117,7 +125,7 @@ public class ProjectService {
             }
 
             // percent = totalSupport/goalPrice
-            percent = Double.valueOf(totalSupport / goalPrice);
+            percent = Double.valueOf((totalSupport / goalPrice)*100);
 
             // percent 소숫점 자르기
             percent = Math.floor(percent);
@@ -180,11 +188,15 @@ public class ProjectService {
     }
 
     @Transactional
-    public ResponseDto deleteProject(Long projectId) {
+    public ResponseDto deleteProject(Long projectId, Member member) {
         // project에 저장된 댓글 전부 삭제
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new NullPointerException("projectId로 Project를 찾을 수 없습니다.")
         );
+
+        if (!project.getMember().getMemberId().equals(member.getMemberId())) {
+            throw new IllegalArgumentException("프로젝트 진행자만 프로젝트를 삭제할 수 있습니다.");
+        }
 
         List<Comment> commentList = commentRepository.findAllByProject(project);
         for (Comment comment : commentList) {
@@ -196,6 +208,7 @@ public class ProjectService {
             supportRepository.delete(support);
         }
 
+        projectRepository.delete(project);
         return new ResponseDto("success", "프로젝트 삭제 및 관련댓글삭제 성공", null);
     }
 
