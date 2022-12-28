@@ -124,8 +124,7 @@ public class ProjectService {
             Long longPercent = percent.longValue();
 
             // 좋아요 갯수 반환
-            int projectLike = projectLikeRepository.findAllByProject(project).size();
-
+            int projectLike = projectLikeRepository.countAllByProject(project);
             projectListResponseDto = projectMapper.entityToProjectListResponseDto(project, totalSupport, longPercent, projectLike);
             projectListResponseDtoList.add(projectListResponseDto);
         }
@@ -168,7 +167,7 @@ public class ProjectService {
         }
 
 
-        int projectLike = projectLikeRepository.findAllByProject(project).size();
+        int projectLike = projectLikeRepository.countAllByProject(project);
         // 이미지 데이터베이스에서 project에 연관된 thumbnailImage 리스트를 불러오기(프로젝트, 문자열인풋하기)
         List<ProjectImage> thumbnailImageList = projectImageRepository.findAllByProjectAndWhichContent(project, "thumbnailImage");
         List<String> thumbnailImageListUrl = new ArrayList<>();
