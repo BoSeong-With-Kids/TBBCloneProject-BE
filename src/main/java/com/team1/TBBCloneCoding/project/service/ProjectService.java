@@ -16,9 +16,14 @@ import com.team1.TBBCloneCoding.project.repository.ProjectImageRepository;
 import com.team1.TBBCloneCoding.project.repository.ProjectLikeRepository;
 import com.team1.TBBCloneCoding.project.repository.ProjectRepository;
 import com.team1.TBBCloneCoding.project.repository.SupportRepository;
+import com.team1.TBBCloneCoding.security.jwt.JwtUtil;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +40,8 @@ public class ProjectService {
     private final ProjectLikeMapper projectLikeMapper;
     private final ProjectLikeRepository projectLikeRepository;
     private final ProjectImageRepository projectImageRepository;
+
+    private final JwtUtil jwtUtil;
 
     @Transactional
     public ResponseDto createProject(ProjectCreateRequestDto projectCreateRequestDto, Member member) {
@@ -63,14 +70,12 @@ public class ProjectService {
     }
 
     @Transactional
-    public ResponseDto updateProject(Long projectId, ProjectUpdateRequestDto projectUpdateRequestDto, Member member) {
+    public ResponseDto updateProject(Long projectId, ProjectUpdateRequestDto projectUpdateRequestDto) {
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new IllegalArgumentException("projectId로 데이터베이스에서 프로젝트를 찾을 수 없습니다.")
         );
 
-        if (!member.getLoginId().equals(project.getMember().getLoginId())) {
-            throw new IllegalArgumentException("프로젝트를 생성한 사용자가 아닙니다.");
-        }
+
 
         //project.update(dto.get---, dto.get---);
         project = projectMapper.projectUpdateRequestDtoToEntity(projectUpdateRequestDto);
@@ -119,8 +124,7 @@ public class ProjectService {
             Long longPercent = percent.longValue();
 
             // 좋아요 갯수 반환
-            int projectLike = projectLikeRepository.findAllByProject(project).size();
-
+            int projectLike = projectLikeRepository.countByProject(project);
             projectListResponseDto = projectMapper.entityToProjectListResponseDto(project, totalSupport, longPercent, projectLike);
             projectListResponseDtoList.add(projectListResponseDto);
         }
@@ -129,7 +133,7 @@ public class ProjectService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseDto getProjectDetails(Long projectId, Member member) {
+    public ResponseDto getProjectDetails(Long projectId, HttpServletRequest request) {
 
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new NullPointerException("projectId로 불러 올 수 있는 프로젝트가 없습니다.")
@@ -144,14 +148,26 @@ public class ProjectService {
             totalSupport = totalSupport + support.getSupportAmount();
         }
 
+
         // ProjectDetails를 불러오는 사람이 이 프로젝트를 올린 사람인지 확인하는 로직 :: 같은 사람이 맞다면 => "isMine = true", 같은 사람이 아니면 => "isMine = false"
+        // 1) 토큰 가져오기
+        String token = jwtUtil.resolveToken(request);
         boolean isMine = false;
-        if (member.getMemberId() == project.getMember().getMemberId()) {
-            isMine = true;
+        if (token != null) {
+            // 2) 토큰 유효시간 검증
+            if (!jwtUtil.validateToken(token)) {
+                throw new IllegalArgumentException("Token Error");
+            }
+            // 3) 토큰에서 사용자 정보 가져오기
+            Claims claims = jwtUtil.getUserInfoFromToken(token);
+            if(project.getMember().getLoginId().equals(claims.getSubject())){
+                // 4) 토큰에서 전달해준 loginId와 projectId로 디비에서 찾은 프로젝트 아이디가 같다면 isMine을 true로 만든다.
+                isMine = true;
+            }
         }
 
-        int projectLike = projectLikeRepository.findAllByProject(project).size();
 
+        int projectLike = projectLikeRepository.countByProject(project);
         // 이미지 데이터베이스에서 project에 연관된 thumbnailImage 리스트를 불러오기(프로젝트, 문자열인풋하기)
         List<ProjectImage> thumbnailImageList = projectImageRepository.findAllByProjectAndWhichContent(project, "thumbnailImage");
         List<String> thumbnailImageListUrl = new ArrayList<>();
