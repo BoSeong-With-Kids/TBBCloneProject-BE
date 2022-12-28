@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -37,9 +39,9 @@ public class CommentController {
 
 
     @GetMapping("/project/{projectId}/comment")
-    public ResponseEntity<ResponseDto> getAllComment(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, @PathVariable Long projectId) {
+    public ResponseEntity<ResponseDto> getAllComment(HttpServletRequest request, @PathVariable Long projectId) {
 
-        ResponseDto responseDto = commentService.getAllComment(userDetailsImpl, projectId);
+        ResponseDto responseDto = commentService.getAllComment(request, projectId);
 
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
