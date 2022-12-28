@@ -10,6 +10,7 @@ import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.member.repository.MemberRepository;
 import com.team1.TBBCloneCoding.project.entity.Project;
 import com.team1.TBBCloneCoding.project.repository.ProjectRepository;
+import com.team1.TBBCloneCoding.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,9 @@ public class CommentService {
 
 
     @Transactional
-    public ResponseDto createComment(Member member, Long projectId, CommentCreateRequestDto commentCreateRequestDto){
+    public ResponseDto createComment(UserDetailsImpl userDetailsImpl, Long projectId, CommentCreateRequestDto commentCreateRequestDto){
+
+        Member member = userDetailsImpl.getMember();
 
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시물 입니다.")
@@ -46,15 +49,15 @@ public class CommentService {
 
 
     @Transactional(readOnly = true)
-    public ResponseDto getAllComment(Member member, Long projectId) {
+    public ResponseDto getAllComment(UserDetailsImpl userDetailsImpl, Long projectId) {
 
-        Long memberId = member.getMemberId();
+        Long memberId = userDetailsImpl.getMember().getMemberId();
 
         Boolean commentIsMine = false;
 
         List<CommentResponseDto> allCommentResponseDto = new ArrayList<>();
 
-        List<Comment> comments = commentRepository.findAllByOrderByModifiedAtDesc();
+        List<Comment> comments = commentRepository.findAllByOrderByCreatedAtDesc();
 
         for(Comment comment : comments) {
 
@@ -69,9 +72,9 @@ public class CommentService {
      
      
     @Transactional
-    public ResponseDto updateComment(Member member, Long commentId, CommentCreateRequestDto commentCreateRequestDto){
+    public ResponseDto updateComment(UserDetailsImpl userDetailsImpl, Long commentId, CommentCreateRequestDto commentCreateRequestDto){
 
-        Long memberId = member.getMemberId();
+        Long memberId = userDetailsImpl.getMember().getMemberId();
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new IllegalArgumentException("해당 댓글 찾을 수 없습니다")
@@ -89,9 +92,9 @@ public class CommentService {
        
        
     @Transactional
-    public ResponseDto deleteComment(Member member, Long commentId){
+    public ResponseDto deleteComment(UserDetailsImpl userDetailsImpl, Long commentId){
 
-        Long memberId = member.getMemberId();
+        Long memberId = userDetailsImpl.getMember().getMemberId();
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다.")
