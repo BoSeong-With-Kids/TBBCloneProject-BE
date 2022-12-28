@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ProjectLikeRepository extends JpaRepository<ProjectLike, Long> {
 
     Optional<ProjectLike> findByProjectAndMember(Project project, Member member);
-    int countAllByProject(Project project);
+    int countByProject(Project project);
     void deleteByProjectAndMember(Project project, Member member);
 
 }
