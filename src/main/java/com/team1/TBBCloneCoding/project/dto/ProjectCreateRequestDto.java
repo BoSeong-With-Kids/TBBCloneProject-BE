@@ -1,6 +1,7 @@
 package com.team1.TBBCloneCoding.project.dto;
 
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -15,7 +16,9 @@ public class ProjectCreateRequestDto {
     private String summary;
     private String content;
     private Long goalPrice;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime statDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endDate;
     private List<Long> thumbnailList;
     private List<Long> contentImageList;
