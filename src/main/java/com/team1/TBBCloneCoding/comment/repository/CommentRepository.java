@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByProject(Project project);
-    List<Comment> findAllByOrderByModifiedAtDesc();
+    List<Comment> findAllByOrderByCreatedAtDesc();
+
 }
