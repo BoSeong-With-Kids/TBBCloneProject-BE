@@ -6,7 +6,5 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class SupportCreateRequestDto {
-
     private Long supportAmount;
-
 }

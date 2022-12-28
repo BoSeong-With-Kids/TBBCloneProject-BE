@@ -42,7 +42,7 @@ public class ProjectService {
         projectRepository.save(project);
 
         ProjectImage image;
-        List<Long> thumbnailListNumber = projectCreateRequestDto.getThumbnailList();
+        List<Long> thumbnailListNumber = projectCreateRequestDto.getThumbnailListPk();
         for(Long i : thumbnailListNumber){
             image = projectImageRepository.findById(i).orElseThrow(
                     () -> new NullPointerException("id에 맞는 이미지가 썸네일이미지 데이터베이스에 존재하지 않습니다.")
@@ -50,7 +50,7 @@ public class ProjectService {
             image.thumbnailImageConnectionWithProject(project);
         }
 
-        List<Long> imageNumberList = projectCreateRequestDto.getContentImageList();
+        List<Long> imageNumberList = projectCreateRequestDto.getContentImageListPk();
         for(Long i : imageNumberList){
             // 저장된 이미지를 레포지토리 가져와서 연결
             image = projectImageRepository.findById(i).orElseThrow(
@@ -154,8 +154,12 @@ public class ProjectService {
 
         // 이미지 데이터베이스에서 project에 연관된 thumbnailImage 리스트를 불러오기(프로젝트, 문자열인풋하기)
         List<ProjectImage> thumbnailImageList = projectImageRepository.findAllByProjectAndWhichContent(project, "thumbnailImage");
+        List<String> thumbnailImageListUrl = new ArrayList<>();
+        for(ProjectImage image : thumbnailImageList){
+            thumbnailImageListUrl.add(image.getImageUrl());
+        }
 
-        ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine, projectLike, thumbnailImageList);
+        ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine, projectLike, thumbnailImageListUrl);
         return new ResponseDto("success", "리스트 조회 성공", projectDetailsReadResponseDto);
     }
 

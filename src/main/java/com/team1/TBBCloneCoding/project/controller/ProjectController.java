@@ -28,25 +28,25 @@ public class ProjectController {
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/project/list")
     public ResponseEntity<ResponseDto> getProjectList(@RequestParam("filter") String filter, @RequestParam("category") String category) {
         ResponseDto responseDto = projectService.getProjectList(filter, category);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{projectId}/details")
+    @GetMapping("/project/{projectId}/details")
     public ResponseEntity<ResponseDto> getProjectDetails(@PathVariable Long projectId,  @AuthenticationPrincipal UserDetailsImpl userDetails){
         ResponseDto responseDto = projectService.getProjectDetails(projectId, userDetails.getMember());
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @PutMapping("/{projectId}")
+    @PutMapping("/project/{projectId}")
     public ResponseEntity<ResponseDto> updateProject(@PathVariable Long projectId, @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         ResponseDto responseDto = projectService.updateProject(projectId, projectUpdateRequestDto, userDetails.getMember());
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{projectId}")
+    @DeleteMapping("/project/{projectId}")
     public ResponseEntity<ResponseDto> deleteProject(@PathVariable Long projectId){
         ResponseDto responseDto = projectService.deleteProject(projectId);
         return new ResponseEntity(responseDto,HttpStatus.OK);
