@@ -29,17 +29,6 @@ public class ProjectMapper {
                 .thumbnailImageListUrl(thumbnailImageList)
                 .build();
     }
-    
-    public Project projectUpdateRequestDtoToEntity(ProjectUpdateRequestDto projectUpdateRequestDto) {
-        return Project.builder()
-                .category(projectUpdateRequestDto.getCategory())
-                .title(projectUpdateRequestDto.getTitle())
-                .summary(projectUpdateRequestDto.getSummary())
-                .goalPrice(projectUpdateRequestDto.getGoalPrice())
-                .startDate(projectUpdateRequestDto.getStartDate())
-                .endDate(projectUpdateRequestDto.getEndDate())
-                .build();
-    }
 
     public Project toEntity(ProjectCreateRequestDto projectCreateRequestDto, Member member){
         return Project.builder()

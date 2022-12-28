@@ -48,20 +48,20 @@ public class ProjectController {
     }
 
     @DeleteMapping("/project/{projectId}")
-    public ResponseEntity<ResponseDto> deleteProject(@PathVariable Long projectId){
-        ResponseDto responseDto = projectService.deleteProject(projectId);
+    public ResponseEntity<ResponseDto> deleteProject(@PathVariable Long projectId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        ResponseDto responseDto = projectService.deleteProject(projectId, userDetails.getMember());
         return new ResponseEntity(responseDto,HttpStatus.OK);
     }
 
     @PostMapping("/project/supporting/{projectId}")
-    public ResponseEntity<ResponseDto> createSupport(Member member, @PathVariable Long projectId, @RequestBody SupportCreateRequestDto supportCreateRequestDto){
-        ResponseDto responseDto = projectService.createSupport(member, projectId, supportCreateRequestDto);
+    public ResponseEntity<ResponseDto> createSupport(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long projectId, @RequestBody SupportCreateRequestDto supportCreateRequestDto){
+        ResponseDto responseDto = projectService.createSupport(userDetails.getMember(), projectId, supportCreateRequestDto);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
     @PostMapping("/project/like/{projectId}")
-    public ResponseEntity<ResponseDto> createProjectLike(Member member, @PathVariable Long projectId){
-        ResponseDto responseDto = projectService.createProjectLike(member, projectId);
+    public ResponseEntity<ResponseDto> createProjectLike(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long projectId){
+        ResponseDto responseDto = projectService.createProjectLike(userDetails.getMember(), projectId);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 }

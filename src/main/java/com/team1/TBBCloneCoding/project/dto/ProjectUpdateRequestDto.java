@@ -13,6 +13,7 @@ public class ProjectUpdateRequestDto {
     private String title;
     @Size(min=0,max=150, message = "150자 미만으로 작성해주세요")
     private String summary;
+    private String content;
     private Long goalPrice;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startDate;
