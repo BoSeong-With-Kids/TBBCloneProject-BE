@@ -61,20 +61,18 @@ public class CommentService {
                 () -> new IllegalArgumentException("존재하지 않는 게시물 입니다.")
         );
 
-        Member member = memberRepository.findById(project.getMember().getMemberId()).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 유저입니다.")
-        );
-
-        Boolean commentIsMine;
+        Boolean commentIsMine = false;
 
         String token = jwtUtil.resolveToken(request);
-        Claims claims;
 
         List<CommentResponseDto> allCommentResponseDto = new ArrayList<>();
 
         List<Comment> comments = commentRepository.findAllByOrderByCreatedAtDesc();
 
         if (token != null) {
+
+            Claims claims;
+
             if (jwtUtil.validateToken(token)) {
                 // 토큰에서 사용자 정보 가져오기
                 claims = jwtUtil.getUserInfoFromToken(token);
