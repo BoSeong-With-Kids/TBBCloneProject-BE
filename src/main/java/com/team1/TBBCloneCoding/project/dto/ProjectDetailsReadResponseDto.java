@@ -19,5 +19,5 @@ public class ProjectDetailsReadResponseDto {
     private int projectLike;
     private String content;
     private boolean projectIsMine;
-    private List<ProjectImage> thumbnailImageList;
+    private List<String> thumbnailImageListUrl;
 }

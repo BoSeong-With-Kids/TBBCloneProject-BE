@@ -14,20 +14,19 @@ import java.util.List;
 @Component
 public class ProjectMapper {
 
-    public ProjectDetailsReadResponseDto entityToProjectDetailsReadResponseDto(Project project, Long totalSupport, int supporterCount, boolean isMine, int projectLike, List<ProjectImage> thumbnailImageList) {
+    public ProjectDetailsReadResponseDto entityToProjectDetailsReadResponseDto(Project project, Long totalSupport, int supporterCount, boolean isMine, int projectLike, List<String> thumbnailImageList) {
         return ProjectDetailsReadResponseDto.builder()
                 .category(project.getCategory())
                 .title(project.getTitle())
-                .summary(project.getSummary())
-                .content(project.getContent())
                 .totalSupport(totalSupport)
                 .supporterCount(supporterCount)
                 .goalPrice(project.getGoalPrice())
                 .startDate(project.getStartDate())
                 .endDate(project.getEndDate())
                 .projectLike(projectLike)
+                .content(project.getContent())
                 .projectIsMine(isMine)
-                .thumbnailImageList(thumbnailImageList)
+                .thumbnailImageListUrl(thumbnailImageList)
                 .build();
     }
     
