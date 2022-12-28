@@ -30,6 +30,14 @@ public class S3ApiController {
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
+    @PostMapping("/project/thumbnail")
+    public ResponseEntity<ResponseDto> thumbnailUpload(@AuthenticationPrincipal UserDetailsImpl userDetails, MultipartHttpServletRequest multipartFile) throws IOException {
+        MultipartFile file = multipartFile.getFile("upload");
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        ResponseDto responseDto = s3ApiService.upload(file, fileName, "temp/" + userDetails.getMember().getMemberId().toString() + "/");
+        return new ResponseEntity(responseDto, HttpStatus.OK);
+    }
+
     @DeleteMapping("/project/image")
     public ResponseEntity<ResponseDto> delete(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ProjectImageDeleteRequestDto projectImageDeleteRequestDto){
         ResponseDto responseDto = s3ApiService.delete(userDetails.getMember(), projectImageDeleteRequestDto.getImagePk());

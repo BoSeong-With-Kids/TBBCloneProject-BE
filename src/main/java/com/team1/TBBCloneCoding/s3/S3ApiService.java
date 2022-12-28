@@ -74,8 +74,9 @@ public class S3ApiService {
         // pk
         Long returnPk = projectImageReposirory.findByImageUrl(uploadImageUrl).getImageId();
         ProjectImageResponseDto projectImageResponseDto = projectImageMapper.toResponseDto(returnPk,uploadImageUrl);
-        return new ResponseDto("success", "사진이 s3에 임시로 업로드 되었습니다.", projectImageResponseDto);
+        return new ResponseDto("success", "사진이 s3에 업로드 되었습니다.", projectImageResponseDto);
     }
+
 
     // 로컬에 있는 파일제거
     private void removeNewFile(File targetFile) {
