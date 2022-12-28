@@ -22,7 +22,7 @@ public class ProjectImage {
     private String whichContent;
 
     @ManyToOne
-    @JoinColumn(name = "Project_Id", nullable = false)
+    @JoinColumn(name = "Project_Id", nullable = true)
     private Project project;
 
     @Builder
