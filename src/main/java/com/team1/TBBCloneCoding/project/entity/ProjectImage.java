@@ -19,6 +19,9 @@ public class ProjectImage {
     private String imageUrl;
 
     @Column(nullable = true)
+    private String filename;
+
+    @Column(nullable = true)
     private String whichContent;
 
     @ManyToOne
@@ -26,7 +29,8 @@ public class ProjectImage {
     private Project project;
 
     @Builder
-    public ProjectImage(String imageUrl, Project project) {
+    public ProjectImage(String filename, String imageUrl,Project project) {
+        this.filename = filename;
         this.imageUrl = imageUrl;
         this.project = project;
     }

@@ -15,9 +15,10 @@ public class ProjectImageMapper {
     //            .build();
     //
     //}
-    public ProjectImage entityToProjectImage(String uploadImageUrl){
+    public ProjectImage entityToProjectImage(String filename, String uploadImageUrl){
         return ProjectImage.builder()
                 .imageUrl(uploadImageUrl)
+                .filename(filename)
                 .build();
     }
 
