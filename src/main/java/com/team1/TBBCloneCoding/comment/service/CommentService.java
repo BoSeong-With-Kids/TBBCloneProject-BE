@@ -88,9 +88,10 @@ public class CommentService {
                     commentIsMine = true;
                 } else {
                     commentIsMine = false;
-                    allCommentResponseDto.add(commentMapper.toResponseDto(comment, commentIsMine));
                 }
-            } return new ResponseDto("success", "댓글 리스트 조회 성공", allCommentResponseDto);
+                allCommentResponseDto.add(commentMapper.toResponseDto(comment, commentIsMine));
+            }
+            return new ResponseDto("success", "댓글 리스트 조회 성공", allCommentResponseDto);
 
         }  else {
                 for (Comment comment : comments) {
