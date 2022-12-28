@@ -49,9 +49,9 @@ public class WebSecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, new String[]{"/api/tumblebug/member/signup","/api/tumblebug/member/login"}).permitAll()
-                .antMatchers(HttpMethod.GET, new String[]{"api/tumblebug/project/list"}).permitAll()
-                .antMatchers(HttpMethod.GET, new String[]{"api/tumblebug/project/{projectId}/details"}).permitAll()
-                .antMatchers(HttpMethod.GET, new String[]{"api/tumblebug/project/{projectId}/comment"}).permitAll()
+                .antMatchers(HttpMethod.GET, new String[]{"/api/tumblebug/project/list"}).permitAll()
+                .antMatchers(HttpMethod.GET, new String[]{"/api/tumblebug/project/{\\d+}/details"}).permitAll()
+                .antMatchers(HttpMethod.GET, new String[]{"/api/tumblebug/project/{\\d+}/comment"}).permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling()
