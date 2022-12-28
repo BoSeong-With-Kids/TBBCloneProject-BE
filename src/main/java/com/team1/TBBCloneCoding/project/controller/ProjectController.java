@@ -42,8 +42,8 @@ public class ProjectController {
     }
 
     @PutMapping("/project/{projectId}")
-    public ResponseEntity<ResponseDto> updateProject(@PathVariable Long projectId, @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto, HttpServletRequest request){
-        ResponseDto responseDto = projectService.updateProject(projectId, projectUpdateRequestDto, request);
+    public ResponseEntity<ResponseDto> updateProject(@PathVariable Long projectId, @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto){
+        ResponseDto responseDto = projectService.updateProject(projectId, projectUpdateRequestDto);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 

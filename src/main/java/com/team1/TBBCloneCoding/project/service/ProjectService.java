@@ -70,7 +70,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public ResponseDto updateProject(Long projectId, ProjectUpdateRequestDto projectUpdateRequestDto, HttpServletRequest request) {
+    public ResponseDto updateProject(Long projectId, ProjectUpdateRequestDto projectUpdateRequestDto) {
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new IllegalArgumentException("projectId로 데이터베이스에서 프로젝트를 찾을 수 없습니다.")
         );
