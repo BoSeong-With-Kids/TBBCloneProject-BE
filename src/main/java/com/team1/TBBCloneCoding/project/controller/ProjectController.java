@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -35,14 +36,14 @@ public class ProjectController {
     }
 
     @GetMapping("/project/{projectId}/details")
-    public ResponseEntity<ResponseDto> getProjectDetails(@PathVariable Long projectId,  @AuthenticationPrincipal UserDetailsImpl userDetails){
-        ResponseDto responseDto = projectService.getProjectDetails(projectId, userDetails.getMember());
+    public ResponseEntity<ResponseDto> getProjectDetails(@PathVariable Long projectId, HttpServletRequest request){
+        ResponseDto responseDto = projectService.getProjectDetails(projectId, request);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @PutMapping("/project/{projectId}")
-    public ResponseEntity<ResponseDto> updateProject(@PathVariable Long projectId, @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        ResponseDto responseDto = projectService.updateProject(projectId, projectUpdateRequestDto, userDetails.getMember());
+    public ResponseEntity<ResponseDto> updateProject(@PathVariable Long projectId, @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto, HttpServletRequest request){
+        ResponseDto responseDto = projectService.updateProject(projectId, projectUpdateRequestDto, request);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
