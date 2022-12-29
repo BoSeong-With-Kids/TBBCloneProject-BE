@@ -21,7 +21,6 @@ import java.util.UUID;
 @RequestMapping("/api/tumblebug")
 public class S3ApiController {
     private final S3ApiService s3ApiService;
-
     @PostMapping("/project/image")
     public ResponseEntity<ResponseDto> upload(@AuthenticationPrincipal UserDetailsImpl userDetails, MultipartHttpServletRequest multipartFile) throws IOException {
         MultipartFile file = multipartFile.getFile("upload");
@@ -29,7 +28,6 @@ public class S3ApiController {
         ResponseDto responseDto = s3ApiService.upload(file, fileName, "temp/" + userDetails.getMember().getMemberId().toString() + "/");
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
-
     @PostMapping("/project/thumbnail")
     public ResponseEntity<ResponseDto> thumbnailUpload(@AuthenticationPrincipal UserDetailsImpl userDetails, MultipartHttpServletRequest multipartFile) throws IOException {
         MultipartFile file = multipartFile.getFile("upload");
@@ -37,7 +35,6 @@ public class S3ApiController {
         ResponseDto responseDto = s3ApiService.upload(file, fileName, "temp/" + userDetails.getMember().getMemberId().toString() + "/");
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
-
     @DeleteMapping("/project/image")
     public ResponseEntity<ResponseDto> delete(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ProjectImageDeleteRequestDto projectImageDeleteRequestDto){
         ResponseDto responseDto = s3ApiService.delete(userDetails.getMember(), projectImageDeleteRequestDto.getImagePk());

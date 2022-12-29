@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice(basePackageClasses = ProjectController.class)
 public class ProjectExceptionAdvisor {
-
     @ExceptionHandler(IllegalArgumentException.class)
     protected ResponseEntity<ResponseDto> CommentExceptionHandler(IllegalArgumentException e) {
         return new ResponseEntity(new ResponseDto("fail", e.getMessage(), null), HttpStatus.BAD_REQUEST);

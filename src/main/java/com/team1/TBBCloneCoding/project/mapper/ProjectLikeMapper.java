@@ -9,13 +9,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProjectLikeMapper {
-
     public ProjectLike toProjectLike(Member member, Project project) {
-
         return ProjectLike.builder()
                 .member(member)
                 .project(project)
                 .build();
-
     }
 }

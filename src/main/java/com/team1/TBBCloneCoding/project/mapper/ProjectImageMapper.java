@@ -6,27 +6,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProjectImageMapper {
-    //public Support toSupport(Member member, Project project, SupportCreateRequestDto supportCreateRequestDto) {
-    //
-    //    return Support.builder()
-    //            .supportAmount(supportCreateRequestDto.getSupportAmount())
-    //            .member(member)
-    //            .project(project)
-    //            .build();
-    //
-    //}
     public ProjectImage entityToProjectImage(String filename, String uploadImageUrl){
         return ProjectImage.builder()
                 .imageUrl(uploadImageUrl)
                 .filename(filename)
                 .build();
     }
-
     public ProjectImageResponseDto toResponseDto(Long id, String url){
         return ProjectImageResponseDto.builder()
                 .id(id)
                 .url(url)
                 .build();
     }
-
 }

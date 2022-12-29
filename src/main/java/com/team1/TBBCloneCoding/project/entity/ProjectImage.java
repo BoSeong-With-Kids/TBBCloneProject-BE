@@ -15,13 +15,13 @@ public class ProjectImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long imageId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 4000)
     private String imageUrl;
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 4000)
     private String filename;
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 3000)
     private String whichContent;
 
     @ManyToOne

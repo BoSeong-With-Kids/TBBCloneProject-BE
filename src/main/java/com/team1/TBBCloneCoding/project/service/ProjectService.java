@@ -44,11 +44,13 @@ public class ProjectService {
 
     @Transactional
     public ResponseDto createProject(ProjectCreateRequestDto projectCreateRequestDto, Member member) {
+        System.out.println("projectCreateRequestDto. = " + projectCreateRequestDto.toString());
         Project project = projectMapper.toEntity(projectCreateRequestDto, member);
         projectRepository.save(project);
 
         // 썸네일 이미지 URL 받아서 프로젝트와 연관관계 연결처리
         String thumbUrl = projectCreateRequestDto.getThumbnailImageUrl();
+        System.out.println("thumbUrl = " + thumbUrl);
         ProjectImage thumbImage = projectImageRepository.findByImageUrl(thumbUrl);
         thumbImage.thumbnailImageConnectionWithProject(project);
 
@@ -76,7 +78,7 @@ public class ProjectService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseDto getProjectList(String filter, String category) {
+    public ResponseDto getProjectList(String filter, String category,HttpServletRequest request) {
 
         List<Project> projectList;
         // filter에 따라서 정렬순서변경
@@ -119,25 +121,29 @@ public class ProjectService {
                 totalSupport = totalSupport + support.getSupportAmount();
             }
 
-            // percent = totalSupport/goalPrice
-            //percent = Double.valueOf((totalSupport / goalPrice)) * 100;
-
-            // percent 소숫점 자르기
-            //percent = Math.floor(percent);
-            //Long longPercent = percent.longValue();
-
-            // 좋아요 갯수 반환
-            Optional<ProjectLike> tf = projectLikeRepository.findByProject(project);
+            // 좋아요
             boolean projectLike = false;
-            if(tf != null) {
-                projectLike = true;
+            String token = jwtUtil.resolveToken(request);
+            if (token != null) {
+                // 2) 토큰 유효시간 검증
+                if (!jwtUtil.validateToken(token)) {
+                    throw new IllegalArgumentException("Token Error");
+                }
+                // 3) 토큰에서 사용자 정보 가져오기
+                Claims claims = jwtUtil.getUserInfoFromToken(token);
+                if(!project.getMember().getLoginId().equals(claims.getSubject())){
+                    Optional<ProjectLike> tf = projectLikeRepository.findByProjectAndMemberLoginId(project,claims.getSubject());
+                    if(tf.isPresent()) {
+                        projectLike = true;
+                    }
+                }
             }
 
             // thumbnailImageUrl 불러오기
             ProjectImage thumbnailImage = projectImageRepository.findByProjectAndWhichContent(project,"thumbnailImage");
             String thumbnailImageUrl = thumbnailImage.getImageUrl();
 
-            projectListResponseDto = projectMapper.entityToProjectListResponseDto(project, totalSupport, longPercent, projectLike, thumbnailImageUrl);
+            projectListResponseDto = projectMapper.entityToProjectListResponseDto(project, totalSupport, goalPrice, projectLike, thumbnailImageUrl);
             projectListResponseDtoList.add(projectListResponseDto);
         }
 
@@ -162,7 +168,9 @@ public class ProjectService {
 
 
         // ProjectDetails를 불러오는 사람이 이 프로젝트를 올린 사람인지 확인하는 로직 :: 같은 사람이 맞다면 => "isMine = true", 같은 사람이 아니면 => "isMine = false"
+        // ProjectLike 적용
         // 1) 토큰 가져오기
+        boolean projectLike = false;
         String token = jwtUtil.resolveToken(request);
         boolean isMine = false;
         if (token != null) {
@@ -175,6 +183,11 @@ public class ProjectService {
             if(project.getMember().getLoginId().equals(claims.getSubject())){
                 // 4) 토큰에서 전달해준 loginId와 projectId로 디비에서 찾은 프로젝트 아이디가 같다면 isMine을 true로 만든다.
                 isMine = true;
+                // 5) projectLike
+                Optional<ProjectLike> tf = projectLikeRepository.findByProjectAndMemberLoginId(project,claims.getSubject());
+                if(tf.isPresent()) {
+                    projectLike = true;
+                }
             }
         }
 
@@ -185,11 +198,6 @@ public class ProjectService {
         ProjectImage thumbnailImage = projectImageRepository.findByProjectAndWhichContent(project, "thumbnailImage");
         String thumbnailImageUrl = thumbnailImage.getImageUrl();
 
-        Optional<ProjectLike> tf = projectLikeRepository.findByProject(project);
-        boolean projectLike = false;
-        if(tf != null) {
-            projectLike = true;
-        }
         ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine, projectLike, projectLikeCount, thumbnailImageUrl);
         return new ResponseDto("success", "리스트 조회 성공", projectDetailsReadResponseDto);
     }

@@ -11,7 +11,6 @@ import java.util.List;
 
 @Component
 public class ProjectMapper {
-
     public ProjectDetailsReadResponseDto entityToProjectDetailsReadResponseDto(Project project, Long totalSupport, int supporterCount, boolean isMine, boolean projectLike, int projectLikeCount, String thumbnailImageUrl) {
         return ProjectDetailsReadResponseDto.builder()
                 .category(project.getCategory())
@@ -28,7 +27,6 @@ public class ProjectMapper {
                 .thumbnailImageUrl(thumbnailImageUrl)
                 .build();
     }
-
     public Project toEntity(ProjectCreateRequestDto projectCreateRequestDto, Member member){
         return Project.builder()
                 .category(projectCreateRequestDto.getCategory())
@@ -36,13 +34,12 @@ public class ProjectMapper {
                 .summary(projectCreateRequestDto.getSummary())
                 .content(projectCreateRequestDto.getContent())
                 .goalPrice(projectCreateRequestDto.getGoalPrice())
-                .startDate(projectCreateRequestDto.getStatDate())
+                .startDate(projectCreateRequestDto.getStartDate())
                 .endDate(projectCreateRequestDto.getEndDate())
                 .member(member)
                 .build();
     }
-
-    public ProjectListResponseDto entityToProjectListResponseDto(Project project, Long totalSupport, Long percent, boolean projectLike, String thumbnailImageUrl) {
+    public ProjectListResponseDto entityToProjectListResponseDto(Project project, Long totalSupport, Long goalPrice, boolean projectLike, String thumbnailImageUrl) {
         return ProjectListResponseDto.builder()
                 .projectId(project.getProjectId())
                 .category(project.getCategory())
