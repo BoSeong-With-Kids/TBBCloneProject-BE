@@ -12,4 +12,6 @@ public interface ProjectImageRepository extends JpaRepository<ProjectImage, Long
     void deleteById(Long id);
 
     List<ProjectImage> findAllByProjectAndWhichContent(Project project, String thumbnailImage);
+
+    ProjectImage findByProjectAndWhichContent(Project project, String thumbnailImage);
 }

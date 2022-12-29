@@ -18,10 +18,11 @@ public class ProjectListResponseDto {
     private Long totalSupport;
     private Long goalPrice;
     private LocalDateTime endDate;
-    private int projectLike;
+    private boolean projectLike;
+    private String thumbnailImageUrl;
 
     @Builder
-    public ProjectListResponseDto(Long projectId, String category, String title, String summary, String nickname, Long totalSupport, Long goalPrice, LocalDateTime endDate, int projectLike) {
+    public ProjectListResponseDto(Long projectId, String category, String title, String summary, String nickname, Long totalSupport, Long goalPrice, LocalDateTime endDate, boolean projectLike, String thumbnailImageUrl) {
         this.projectId = projectId;
         this.category = category;
         this.title = title;
@@ -31,5 +32,6 @@ public class ProjectListResponseDto {
         this.goalPrice = goalPrice;
         this.endDate = endDate;
         this.projectLike = projectLike;
+        this.thumbnailImageUrl = thumbnailImageUrl;
     }
 }

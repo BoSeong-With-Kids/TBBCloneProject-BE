@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class ProjectMapper {
 
-    public ProjectDetailsReadResponseDto entityToProjectDetailsReadResponseDto(Project project, Long totalSupport, int supporterCount, boolean isMine, int projectLike, List<String> thumbnailImageList) {
+    public ProjectDetailsReadResponseDto entityToProjectDetailsReadResponseDto(Project project, Long totalSupport, int supporterCount, boolean isMine, boolean projectLike, int projectLikeCount, String thumbnailImageUrl) {
         return ProjectDetailsReadResponseDto.builder()
                 .category(project.getCategory())
                 .title(project.getTitle())
@@ -22,9 +22,10 @@ public class ProjectMapper {
                 .startDate(project.getStartDate())
                 .endDate(project.getEndDate())
                 .projectLike(projectLike)
+                .projectLikeCount(projectLikeCount)
                 .content(project.getContent())
                 .projectIsMine(isMine)
-                .thumbnailImageListUrl(thumbnailImageList)
+                .thumbnailImageUrl(thumbnailImageUrl)
                 .build();
     }
 
@@ -35,13 +36,13 @@ public class ProjectMapper {
                 .summary(projectCreateRequestDto.getSummary())
                 .content(projectCreateRequestDto.getContent())
                 .goalPrice(projectCreateRequestDto.getGoalPrice())
-                .startDate(projectCreateRequestDto.getEndDate())
+                .startDate(projectCreateRequestDto.getStatDate())
                 .endDate(projectCreateRequestDto.getEndDate())
                 .member(member)
                 .build();
     }
-    
-    public ProjectListResponseDto entityToProjectListResponseDto(Project project, Long totalSupport, Long goalPrice, int projectLike) {
+
+    public ProjectListResponseDto entityToProjectListResponseDto(Project project, Long totalSupport, Long percent, boolean projectLike, String thumbnailImageUrl) {
         return ProjectListResponseDto.builder()
                 .projectId(project.getProjectId())
                 .category(project.getCategory())
@@ -52,6 +53,7 @@ public class ProjectMapper {
                 .goalPrice(goalPrice)
                 .endDate(project.getEndDate())
                 .projectLike(projectLike)
+                .thumbnailImageUrl(thumbnailImageUrl)
                 .build();
     }
 }

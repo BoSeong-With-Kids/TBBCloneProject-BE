@@ -20,6 +20,6 @@ public class ProjectCreateRequestDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endDate;
     private String content;
-    private List<Long> thumbnailListPk;
+    private String thumbnailImageUrl;
     private List<Long> contentImageListPk;
 }
