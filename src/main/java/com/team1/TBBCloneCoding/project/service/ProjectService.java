@@ -48,6 +48,7 @@ public class ProjectService {
         Project project = projectMapper.toEntity(projectCreateRequestDto, member);
         projectRepository.save(project);
 
+        // 썸네일 이미지 URL 받아서 프로젝트와 연관관계 연결처리
         String thumbUrl = projectCreateRequestDto.getThumbnailImageUrl();
         ProjectImage thumbImage = projectImageRepository.findByImageUrl(thumbUrl);
         thumbImage.thumbnailImageConnectionWithProject(project);
