@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +51,7 @@ public class ProjectService {
         List<Long> thumbnailListNumber = projectCreateRequestDto.getThumbnailListPk();
         for(Long i : thumbnailListNumber){
             image = projectImageRepository.findById(i).orElseThrow(
-                    () -> new NullPointerException("id에 맞는 이미지가 썸네일이미지 데이터베이스에 존재하지 않습니다.")
+                    () -> new IllegalArgumentException("id에 맞는 이미지가 썸네일이미지 데이터베이스에 존재하지 않습니다.")
             );
             image.thumbnailImageConnectionWithProject(project);
         }
@@ -61,7 +60,7 @@ public class ProjectService {
         for(Long i : imageNumberList){
             // 저장된 이미지를 레포지토리 가져와서 연결
             image = projectImageRepository.findById(i).orElseThrow(
-                    () -> new NullPointerException("id에 맞는 이미지가 콘텐트이미지 데이터베이스에 존재하지 않습니다.")
+                    () -> new IllegalArgumentException("id에 맞는 이미지가 콘텐트이미지 데이터베이스에 존재하지 않습니다.")
             );
             image.contentImageConnectionWithProject(project);
         }
@@ -144,7 +143,7 @@ public class ProjectService {
     public ResponseDto getProjectDetails(Long projectId, HttpServletRequest request) {
 
         Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new NullPointerException("projectId로 불러 올 수 있는 프로젝트가 없습니다.")
+                () -> new IllegalArgumentException("projectId로 불러 올 수 있는 프로젝트가 없습니다.")
         );
 
         // 특정 projectId가 담겨있는 support들의 List 불러와서 totalSupport, supporterCount 구하는 로직
@@ -191,7 +190,7 @@ public class ProjectService {
     public ResponseDto deleteProject(Long projectId, Member member) {
         // project에 저장된 댓글 전부 삭제
         Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new NullPointerException("projectId로 Project를 찾을 수 없습니다.")
+                () -> new IllegalArgumentException("projectId로 Project를 찾을 수 없습니다.")
         );
 
         if (!project.getMember().getMemberId().equals(member.getMemberId())) {
@@ -218,11 +217,11 @@ public class ProjectService {
         Long memberId = member.getMemberId();
 
         Member memberForCreateSupport = memberRepository.findById(memberId).orElseThrow(
-                () -> new NullPointerException()
+                () -> new IllegalArgumentException("로그인 상태를 확인해 주세요")
         );
 
         Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new NullPointerException()
+                () -> new IllegalArgumentException("후원하실 프로젝트의 정보를 가져올 수 없습니다.")
         );
 
         Support support = supportMapper.toSupport(memberForCreateSupport, project, supportCreateRequestDto);
