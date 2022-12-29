@@ -67,7 +67,7 @@ public class CommentService {
 
         List<CommentResponseDto> allCommentResponseDto = new ArrayList<>();
 
-        List<Comment> comments = commentRepository.findAllByOrderByCreatedAtDesc();
+        List<Comment> comments = commentRepository.findAllByProjectIdOrderByCreatedAtDesc();
 
         if (token != null) {
 
