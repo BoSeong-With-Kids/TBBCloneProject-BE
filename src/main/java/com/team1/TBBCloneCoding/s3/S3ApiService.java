@@ -68,7 +68,7 @@ public class S3ApiService {
         // pk값, url을 반환하면됨
 
         // 저장
-        ProjectImage projectImage = projectImageMapper.entityToProjectImage(uploadImageUrl);
+        ProjectImage projectImage = projectImageMapper.entityToProjectImage(fileName, uploadImageUrl);
         projectImageReposirory.save(projectImage);
 
         // pk
@@ -134,7 +134,7 @@ public class S3ApiService {
                     () -> new IllegalArgumentException("프로젝트 이미지가 존재하지 않습니다.")
             );
             projectImageReposirory.deleteById(projectImage.getImageId());
-            deleteS3(projectImage.getImageUrl());
+            deleteS3(projectImage.getFilename());
         }
         return new ResponseDto("success","사진 삭제를 완료했습니다.", null);
     }
