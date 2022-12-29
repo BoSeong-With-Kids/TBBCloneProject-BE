@@ -27,7 +27,7 @@ public class Project extends TimeStamp {
     @Column(nullable = false)
     private String summary;
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 60000)
     private String content;
 
     @Column(nullable = false)
