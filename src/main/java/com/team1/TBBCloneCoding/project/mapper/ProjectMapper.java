@@ -36,7 +36,7 @@ public class ProjectMapper {
                 .summary(projectCreateRequestDto.getSummary())
                 .content(projectCreateRequestDto.getContent())
                 .goalPrice(projectCreateRequestDto.getGoalPrice())
-                .startDate(projectCreateRequestDto.getEndDate())
+                .startDate(projectCreateRequestDto.getStatDate())
                 .endDate(projectCreateRequestDto.getEndDate())
                 .member(member)
                 .build();

@@ -48,15 +48,15 @@ public class ProjectService {
         Project project = projectMapper.toEntity(projectCreateRequestDto, member);
         projectRepository.save(project);
 
-        ProjectImage image;
-        List<Long> thumbnailListNumber = projectCreateRequestDto.getThumbnailListPk();
-        for(Long i : thumbnailListNumber){
-            image = projectImageRepository.findById(i).orElseThrow(
-                    () -> new NullPointerException("id에 맞는 이미지가 썸네일이미지 데이터베이스에 존재하지 않습니다.")
-            );
-            image.thumbnailImageConnectionWithProject(project);
-        }
+        //List<Long> thumbnailListNumber = projectCreateRequestDto.getThumbnailListPk();
+        //for(Long i : thumbnailListNumber){
+        //    image = projectImageRepository.findById(i).orElseThrow(
+        //            () -> new NullPointerException("id에 맞는 이미지가 썸네일이미지 데이터베이스에 존재하지 않습니다.")
+        //    );
+        //    image.thumbnailImageConnectionWithProject(project);
+        //}
 
+        ProjectImage image;
         List<Long> imageNumberList = projectCreateRequestDto.getContentImageListPk();
         for(Long i : imageNumberList){
             // 저장된 이미지를 레포지토리 가져와서 연결
