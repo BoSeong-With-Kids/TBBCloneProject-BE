@@ -48,13 +48,9 @@ public class ProjectService {
         Project project = projectMapper.toEntity(projectCreateRequestDto, member);
         projectRepository.save(project);
 
-        //List<Long> thumbnailListNumber = projectCreateRequestDto.getThumbnailListPk();
-        //for(Long i : thumbnailListNumber){
-        //    image = projectImageRepository.findById(i).orElseThrow(
-        //            () -> new NullPointerException("id에 맞는 이미지가 썸네일이미지 데이터베이스에 존재하지 않습니다.")
-        //    );
-        //    image.thumbnailImageConnectionWithProject(project);
-        //}
+        String thumbUrl = projectCreateRequestDto.getThumbnailImageUrl();
+        ProjectImage thumbImage = projectImageRepository.findByImageUrl(thumbUrl);
+        thumbImage.thumbnailImageConnectionWithProject(project);
 
         ProjectImage image;
         List<Long> imageNumberList = projectCreateRequestDto.getContentImageListPk();
@@ -83,7 +79,6 @@ public class ProjectService {
     public ResponseDto getProjectList(String filter, String category) {
 
         List<Project> projectList;
-
         // filter에 따라서 정렬순서변경
         if (filter.equals("oldest")) {
             // 오래된순
