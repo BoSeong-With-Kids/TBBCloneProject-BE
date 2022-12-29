@@ -41,7 +41,7 @@ public class ProjectMapper {
                 .member(member)
                 .build();
     }
-    
+
     public ProjectListResponseDto entityToProjectListResponseDto(Project project, Long totalSupport, Long percent, boolean projectLike, String thumbnailImageUrl) {
         return ProjectListResponseDto.builder()
                 .projectId(project.getProjectId())
@@ -50,7 +50,7 @@ public class ProjectMapper {
                 .summary(project.getSummary())
                 .nickname(project.getMember().getNickname())
                 .totalSupport(totalSupport)
-                .percent(percent)
+                .goalPrice(goalPrice)
                 .endDate(project.getEndDate())
                 .projectLike(projectLike)
                 .thumbnailImageUrl(thumbnailImageUrl)

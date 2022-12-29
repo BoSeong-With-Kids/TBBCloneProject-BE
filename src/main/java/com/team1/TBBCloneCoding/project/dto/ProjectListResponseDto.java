@@ -16,20 +16,20 @@ public class ProjectListResponseDto {
     private String summary;
     private String nickname;
     private Long totalSupport;
-    private Long percent;
+    private Long goalPrice;
     private LocalDateTime endDate;
     private boolean projectLike;
     private String thumbnailImageUrl;
 
     @Builder
-    public ProjectListResponseDto(Long projectId, String category, String title, String summary, String nickname, Long totalSupport, Long percent, LocalDateTime endDate, boolean projectLike, String thumbnailImageUrl) {
+    public ProjectListResponseDto(Long projectId, String category, String title, String summary, String nickname, Long totalSupport, Long goalPrice, LocalDateTime endDate, boolean projectLike, String thumbnailImageUrl) {
         this.projectId = projectId;
         this.category = category;
         this.title = title;
         this.summary = summary;
         this.nickname = nickname;
         this.totalSupport = totalSupport;
-        this.percent = percent;
+        this.goalPrice = goalPrice;
         this.endDate = endDate;
         this.projectLike = projectLike;
         this.thumbnailImageUrl = thumbnailImageUrl;
