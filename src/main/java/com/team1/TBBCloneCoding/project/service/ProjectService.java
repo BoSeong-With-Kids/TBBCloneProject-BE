@@ -134,7 +134,12 @@ public class ProjectService {
             if(tf != null) {
                 projectLike = true;
             }
-            projectListResponseDto = projectMapper.entityToProjectListResponseDto(project, totalSupport, longPercent, projectLike);
+
+            // thumbnailImageUrl 불러오기
+            ProjectImage thumbnailImage = projectImageRepository.findByProjectAndWhichContent(project,"thumbnailImage");
+            String thumbnailImageUrl = thumbnailImage.getImageUrl();
+
+            projectListResponseDto = projectMapper.entityToProjectListResponseDto(project, totalSupport, longPercent, projectLike, thumbnailImageUrl);
             projectListResponseDtoList.add(projectListResponseDto);
         }
 

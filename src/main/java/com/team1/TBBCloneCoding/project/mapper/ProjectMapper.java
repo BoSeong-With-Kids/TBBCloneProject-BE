@@ -42,7 +42,7 @@ public class ProjectMapper {
                 .build();
     }
     
-    public ProjectListResponseDto entityToProjectListResponseDto(Project project, Long totalSupport, Long percent, boolean projectLike) {
+    public ProjectListResponseDto entityToProjectListResponseDto(Project project, Long totalSupport, Long percent, boolean projectLike, String thumbnailImageUrl) {
         return ProjectListResponseDto.builder()
                 .projectId(project.getProjectId())
                 .category(project.getCategory())
@@ -53,6 +53,7 @@ public class ProjectMapper {
                 .percent(percent)
                 .endDate(project.getEndDate())
                 .projectLike(projectLike)
+                .thumbnailImageUrl(thumbnailImageUrl)
                 .build();
     }
 }
