@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class ProjectMapper {
 
-    public ProjectDetailsReadResponseDto entityToProjectDetailsReadResponseDto(Project project, Long totalSupport, int supporterCount, boolean isMine, boolean projectLike, int projectLikeCount, List<String> thumbnailImageList) {
+    public ProjectDetailsReadResponseDto entityToProjectDetailsReadResponseDto(Project project, Long totalSupport, int supporterCount, boolean isMine, boolean projectLike, int projectLikeCount, String thumbnailImageUrl) {
         return ProjectDetailsReadResponseDto.builder()
                 .category(project.getCategory())
                 .title(project.getTitle())
@@ -25,7 +25,7 @@ public class ProjectMapper {
                 .projectLikeCount(projectLikeCount)
                 .content(project.getContent())
                 .projectIsMine(isMine)
-                .thumbnailImageListUrl(thumbnailImageList)
+                .thumbnailImageUrl(thumbnailImageUrl)
                 .build();
     }
 

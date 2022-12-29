@@ -177,20 +177,17 @@ public class ProjectService {
 
 
         int projectLikeCount = projectLikeRepository.countByProject(project);
-        // 이미지 데이터베이스에서 project에 연관된 thumbnailImage 리스트를 불러오기(프로젝트, 문자열인풋하기)
-        List<ProjectImage> thumbnailImageList = projectImageRepository.findAllByProjectAndWhichContent(project, "thumbnailImage");
-        List<String> thumbnailImageListUrl = new ArrayList<>();
-        for(ProjectImage image : thumbnailImageList){
-            thumbnailImageListUrl.add(image.getImageUrl());
-        }
 
+        // 이미지 데이터베이스에서 project에 연관된 thumbnailImage URL을 불러오기(프로젝트, 문자열인풋하기)
+        ProjectImage thumbnailImage = projectImageRepository.findByProjectAndWhichContent(project, "thumbnailImage");
+        String thumbnailImageUrl = thumbnailImage.getImageUrl();
 
         Optional<ProjectLike> tf = projectLikeRepository.findByProject(project);
         boolean projectLike = false;
         if(tf != null) {
             projectLike = true;
         }
-        ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine, projectLike, projectLikeCount, thumbnailImageListUrl);
+        ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine, projectLike, projectLikeCount, thumbnailImageUrl);
         return new ResponseDto("success", "리스트 조회 성공", projectDetailsReadResponseDto);
     }
 

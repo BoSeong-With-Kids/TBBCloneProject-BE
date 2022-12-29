@@ -23,10 +23,10 @@ public class ProjectDetailsReadResponseDto {
     private int projectLikeCount;
     private String content;
     private boolean projectIsMine;
-    private List<String> thumbnailImageListUrl;
+    private String thumbnailImageUrl;
 
     @Builder
-    public ProjectDetailsReadResponseDto(String category, String title, String summary, Long totalSupport, int supporterCount, Long goalPrice, LocalDateTime startDate, LocalDateTime endDate, boolean projectLike ,int projectLikeCount, String content, boolean projectIsMine, List<String> thumbnailImageListUrl) {
+    public ProjectDetailsReadResponseDto(String category, String title, String summary, Long totalSupport, int supporterCount, Long goalPrice, LocalDateTime startDate, LocalDateTime endDate, boolean projectLike ,int projectLikeCount, String content, boolean projectIsMine, String thumbnailImageUrl) {
         this.category = category;
         this.title = title;
         this.summary = summary;
@@ -39,6 +39,6 @@ public class ProjectDetailsReadResponseDto {
         this.projectLikeCount = projectLikeCount;
         this.content = content;
         this.projectIsMine = projectIsMine;
-        this.thumbnailImageListUrl = thumbnailImageListUrl;
+        this.thumbnailImageUrl = thumbnailImageUrl;
     }
 }

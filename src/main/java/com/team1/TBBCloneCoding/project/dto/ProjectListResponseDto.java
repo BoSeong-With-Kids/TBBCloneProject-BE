@@ -19,9 +19,10 @@ public class ProjectListResponseDto {
     private Long percent;
     private LocalDateTime endDate;
     private boolean projectLike;
+    private String thumbnailImageUrl;
 
     @Builder
-    public ProjectListResponseDto(Long projectId, String category, String title, String summary, String nickname, Long totalSupport, Long percent, LocalDateTime endDate, boolean projectLike) {
+    public ProjectListResponseDto(Long projectId, String category, String title, String summary, String nickname, Long totalSupport, Long percent, LocalDateTime endDate, boolean projectLike, String thumbnailImageUrl) {
         this.projectId = projectId;
         this.category = category;
         this.title = title;
@@ -31,5 +32,6 @@ public class ProjectListResponseDto {
         this.percent = percent;
         this.endDate = endDate;
         this.projectLike = projectLike;
+        this.thumbnailImageUrl = thumbnailImageUrl;
     }
 }
