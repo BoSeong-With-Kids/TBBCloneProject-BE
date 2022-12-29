@@ -132,7 +132,12 @@ public class ProjectService {
             Long longPercent = percent.longValue();
 
             // 좋아요 갯수 반환
-            int projectLike = projectLikeRepository.countByProject(project);
+            // int projectLike = projectLikeRepository.countByProject(project);
+            Optional<ProjectLike> tf = projectLikeRepository.findByProject(project);
+            boolean projectLike = false;
+            if(tf != null) {
+                projectLike = true;
+            }
             projectListResponseDto = projectMapper.entityToProjectListResponseDto(project, totalSupport, longPercent, projectLike);
             projectListResponseDtoList.add(projectListResponseDto);
         }
@@ -175,7 +180,7 @@ public class ProjectService {
         }
 
 
-        int projectLike = projectLikeRepository.countByProject(project);
+        int projectLikeCount = projectLikeRepository.countByProject(project);
         // 이미지 데이터베이스에서 project에 연관된 thumbnailImage 리스트를 불러오기(프로젝트, 문자열인풋하기)
         List<ProjectImage> thumbnailImageList = projectImageRepository.findAllByProjectAndWhichContent(project, "thumbnailImage");
         List<String> thumbnailImageListUrl = new ArrayList<>();
@@ -183,7 +188,13 @@ public class ProjectService {
             thumbnailImageListUrl.add(image.getImageUrl());
         }
 
-        ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine, projectLike, thumbnailImageListUrl);
+
+        Optional<ProjectLike> tf = projectLikeRepository.findByProject(project);
+        boolean projectLike = false;
+        if(tf != null) {
+            projectLike = true;
+        }
+        ProjectDetailsReadResponseDto projectDetailsReadResponseDto = projectMapper.entityToProjectDetailsReadResponseDto(project, totalSupport, supporterCount, isMine, projectLike, projectLikeCount, thumbnailImageListUrl);
         return new ResponseDto("success", "리스트 조회 성공", projectDetailsReadResponseDto);
     }
 

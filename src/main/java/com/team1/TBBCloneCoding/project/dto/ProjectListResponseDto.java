@@ -18,10 +18,10 @@ public class ProjectListResponseDto {
     private Long totalSupport;
     private Long percent;
     private LocalDateTime endDate;
-    private int projectLike;
+    private boolean projectLike;
 
     @Builder
-    public ProjectListResponseDto(Long projectId, String category, String title, String summary, String nickname, Long totalSupport, Long percent, LocalDateTime endDate, int projectLike) {
+    public ProjectListResponseDto(Long projectId, String category, String title, String summary, String nickname, Long totalSupport, Long percent, LocalDateTime endDate, boolean projectLike) {
         this.projectId = projectId;
         this.category = category;
         this.title = title;

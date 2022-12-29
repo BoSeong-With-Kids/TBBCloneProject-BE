@@ -3,10 +3,8 @@ package com.team1.TBBCloneCoding.project.mapper;
 import com.team1.TBBCloneCoding.project.dto.ProjectDetailsReadResponseDto;
 import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.project.dto.ProjectCreateRequestDto;
-import com.team1.TBBCloneCoding.project.dto.ProjectUpdateRequestDto;
 import com.team1.TBBCloneCoding.project.dto.ProjectListResponseDto;
 import com.team1.TBBCloneCoding.project.entity.Project;
-import com.team1.TBBCloneCoding.project.entity.ProjectImage;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.List;
 @Component
 public class ProjectMapper {
 
-    public ProjectDetailsReadResponseDto entityToProjectDetailsReadResponseDto(Project project, Long totalSupport, int supporterCount, boolean isMine, int projectLike, List<String> thumbnailImageList) {
+    public ProjectDetailsReadResponseDto entityToProjectDetailsReadResponseDto(Project project, Long totalSupport, int supporterCount, boolean isMine, boolean projectLike, int projectLikeCount, List<String> thumbnailImageList) {
         return ProjectDetailsReadResponseDto.builder()
                 .category(project.getCategory())
                 .title(project.getTitle())
@@ -24,6 +22,7 @@ public class ProjectMapper {
                 .startDate(project.getStartDate())
                 .endDate(project.getEndDate())
                 .projectLike(projectLike)
+                .projectLikeCount(projectLikeCount)
                 .content(project.getContent())
                 .projectIsMine(isMine)
                 .thumbnailImageListUrl(thumbnailImageList)
@@ -43,7 +42,7 @@ public class ProjectMapper {
                 .build();
     }
     
-    public ProjectListResponseDto entityToProjectListResponseDto(Project project, Long totalSupport, Long percent, int projectLike) {
+    public ProjectListResponseDto entityToProjectListResponseDto(Project project, Long totalSupport, Long percent, boolean projectLike) {
         return ProjectListResponseDto.builder()
                 .projectId(project.getProjectId())
                 .category(project.getCategory())
