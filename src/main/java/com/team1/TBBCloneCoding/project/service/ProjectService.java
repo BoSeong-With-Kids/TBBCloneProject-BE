@@ -124,15 +124,15 @@ public class ProjectService {
             }
 
             // percent = totalSupport/goalPrice
-            percent = Double.valueOf((totalSupport / goalPrice)*100);
+            //percent = Double.valueOf((totalSupport / goalPrice)) * 100;
 
             // percent 소숫점 자르기
-            percent = Math.floor(percent);
-            Long longPercent = percent.longValue();
+            //percent = Math.floor(percent);
+            //Long longPercent = percent.longValue();
 
             // 좋아요 갯수 반환
             int projectLike = projectLikeRepository.countByProject(project);
-            projectListResponseDto = projectMapper.entityToProjectListResponseDto(project, totalSupport, longPercent, projectLike);
+            projectListResponseDto = projectMapper.entityToProjectListResponseDto(project, totalSupport, goalPrice, projectLike);
             projectListResponseDtoList.add(projectListResponseDto);
         }
 

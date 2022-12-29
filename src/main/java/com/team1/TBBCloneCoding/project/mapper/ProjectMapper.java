@@ -3,10 +3,8 @@ package com.team1.TBBCloneCoding.project.mapper;
 import com.team1.TBBCloneCoding.project.dto.ProjectDetailsReadResponseDto;
 import com.team1.TBBCloneCoding.member.entity.Member;
 import com.team1.TBBCloneCoding.project.dto.ProjectCreateRequestDto;
-import com.team1.TBBCloneCoding.project.dto.ProjectUpdateRequestDto;
 import com.team1.TBBCloneCoding.project.dto.ProjectListResponseDto;
 import com.team1.TBBCloneCoding.project.entity.Project;
-import com.team1.TBBCloneCoding.project.entity.ProjectImage;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -43,7 +41,7 @@ public class ProjectMapper {
                 .build();
     }
     
-    public ProjectListResponseDto entityToProjectListResponseDto(Project project, Long totalSupport, Long percent, int projectLike) {
+    public ProjectListResponseDto entityToProjectListResponseDto(Project project, Long totalSupport, Long goalPrice, int projectLike) {
         return ProjectListResponseDto.builder()
                 .projectId(project.getProjectId())
                 .category(project.getCategory())
@@ -51,7 +49,7 @@ public class ProjectMapper {
                 .summary(project.getSummary())
                 .nickname(project.getMember().getNickname())
                 .totalSupport(totalSupport)
-                .percent(percent)
+                .goalPrice(goalPrice)
                 .endDate(project.getEndDate())
                 .projectLike(projectLike)
                 .build();
