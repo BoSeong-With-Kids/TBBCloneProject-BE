@@ -10,13 +10,13 @@ import java.util.List;
 @Getter
 public class ProjectCreateRequestDto {
     private String category;
-    @Size(min=0,max=30, message = "30자 미만으로 작성해주세요")
+    @Size(min=0,max=100, message = "100자 미만으로 작성해주세요")
     private String title;
     @Size(min=0,max=150, message = "150자 미만으로 작성해주세요")
     private String summary;
     private Long goalPrice;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime statDate;
+    private LocalDateTime startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endDate;
     private String content;

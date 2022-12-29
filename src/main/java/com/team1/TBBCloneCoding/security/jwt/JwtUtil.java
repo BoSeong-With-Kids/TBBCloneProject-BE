@@ -23,20 +23,15 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
-
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-//    @Value("${token_time}")
-//    private String token_time;
-
     private final UserDetailsServiceImpl userDetailsService;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-
     @PostConstruct
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
@@ -51,11 +46,9 @@ public class JwtUtil {
     }
     public String createToken(String Username) {
         Date date = new Date();
-
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(Username)
-//                        .setExpiration(new Date(date.getTime() + Long.parseLong(token_time)))
                         .setExpiration(new Date(date.getTime() + 60 * 60 * 1000L))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
@@ -83,7 +76,4 @@ public class JwtUtil {
         UserDetails userDetails = userDetailsService.loadUserByUsername(Username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
-
-
-
 }

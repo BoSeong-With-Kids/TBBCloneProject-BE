@@ -30,8 +30,8 @@ public class ProjectController {
     }
 
     @GetMapping("/project/list")
-    public ResponseEntity<ResponseDto> getProjectList(@RequestParam("filter") String filter, @RequestParam("category") String category) {
-        ResponseDto responseDto = projectService.getProjectList(filter, category);
+    public ResponseEntity<ResponseDto> getProjectList(@RequestParam("filter") String filter, @RequestParam("category") String category,HttpServletRequest request) {
+        ResponseDto responseDto = projectService.getProjectList(filter, category, request);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 

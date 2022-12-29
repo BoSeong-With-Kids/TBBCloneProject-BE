@@ -8,8 +8,6 @@ import java.util.List;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findAllByCategoryOrderByCreatedAtDesc(String category);
     List<Project> findAllByCategoryOrderByCreatedAtAsc(String category);
-
     List<Project> findAllByOrderByCreatedAtAsc();
-
     List<Project> findAllByOrderByCreatedAtDesc();
 }

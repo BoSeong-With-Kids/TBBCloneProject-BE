@@ -21,10 +21,10 @@ public class Project extends TimeStamp {
     @Column(nullable = false)
     private String category;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 3000)
     private String summary;
 
     @Column(nullable = true, length = 60000)

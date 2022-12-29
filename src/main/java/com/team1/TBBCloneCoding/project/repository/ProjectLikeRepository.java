@@ -11,6 +11,5 @@ public interface ProjectLikeRepository extends JpaRepository<ProjectLike, Long> 
     Optional<ProjectLike> findByProjectAndMember(Project project, Member member);
     int countByProject(Project project);
     void deleteByProjectAndMember(Project project, Member member);
-
-    Optional<ProjectLike> findByProject(Project project);
+    Optional<ProjectLike> findByProjectAndMemberLoginId(Project project, String subject);
 }

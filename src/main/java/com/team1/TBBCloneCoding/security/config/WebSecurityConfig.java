@@ -76,6 +76,8 @@ public class WebSecurityConfig {
 
         config.addAllowedOrigin("http://localhost:3000");
 
+        config.addAllowedOrigin("http://donghyun-hanghae.s3-website.ap-northeast-2.amazonaws.com/");
+
         config.addExposedHeader(JwtUtil.AUTHORIZATION_HEADER);
 
         config.addAllowedMethod("*");

@@ -58,14 +58,11 @@ public class S3ApiService {
                 .withRegion(this.region)
                 .build();
     }
-
     public ResponseDto upload(MultipartFile multipartFile, String fileName, String dirName) throws IOException {
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("파일변환실패"));
         fileName = dirName + fileName;
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
-        // s3 url을 이미지 디비에 저장하고 ( uploadImageUrl받아서 매퍼 통해서 ProjectImage 객체생성)
-        // pk값, url을 반환하면됨
 
         // 저장
         ProjectImage projectImage = projectImageMapper.entityToProjectImage(fileName, uploadImageUrl);
@@ -104,8 +101,6 @@ public class S3ApiService {
         );
         return s3Client.getUrl(bucket, fileName).toString();
     }
-
-
     // s3내에서 이미지 위치 변경 코드
     public void update(String oldSource, String newSource) {
         try {
@@ -118,15 +113,12 @@ public class S3ApiService {
         moveS3(oldSource, newSource);
         deleteS3(oldSource);
     }
-
     private void moveS3(String oldSource, String newSource) {
         s3Client.copyObject(bucket, oldSource, bucket, newSource);
     }
-
     private void deleteS3(String source) {
         s3Client.deleteObject(bucket, source);
     }
-
     @Transactional
     public ResponseDto delete(Member member, List<Long> imagePk) {
         for(Long id : imagePk) {
